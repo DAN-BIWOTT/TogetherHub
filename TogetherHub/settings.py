@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'HelloWorld',
     'AuthenticationApp',
     'HomeApp',
+    'DashboardApp',
 ]
 
 MIDDLEWARE = [
@@ -109,6 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'AuthenticationApp.CustomUser'
 
 
 # Internationalization

@@ -48,15 +48,27 @@
         <h2 class="fw-bold">Login</h2>
         <p class="text-muted">Login to access your account</p>
         
-        <form>
+        <!-- <form method="post"> -->
+            <form method="">
+            {% csrf_token %}
             <div class="mb-3">
-                <input type="email" class="form-control" placeholder="abc@gmail.com" required>
+                <!-- <input type="email" class="form-control" name="email" placeholder="myEmail@gmail.com" required> -->
+                <input type="email" class="form-control" name="" placeholder="myEmail@gmail.com" required>
             </div>
             <div class="mb-3">
-                <input type="password" class="form-control" placeholder="Password" required>
+                <input type="password" class="form-control" name="password" placeholder="Password" required>
             </div>
             <button type="submit" class="btn btn-primary w-100">Log in</button>
         </form>
+        
+        {% if messages %}
+            <div class="alert alert-danger mt-3">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
         
         <p class="text-muted mt-3">Or continue with</p>
         <div class="social-login">

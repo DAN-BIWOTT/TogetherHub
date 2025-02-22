@@ -22,5 +22,5 @@ urlpatterns = [
     path('hello/', include("HelloWorld.urls") ),
     path('', include("HomeApp.urls") ),
     path('auth/', include("AuthenticationApp.urls") ),
-
+    path('dashboard/', include("DashboardApp.urls")), 
 ]
