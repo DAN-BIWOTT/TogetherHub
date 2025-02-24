@@ -31,11 +31,28 @@ def sign_up(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+        verify_password = request.POST.get('verify_password')
         membership = request.POST.get('membership')
         interest = request.POST.get('interest')
 
         if not membership:
             messages.error(request, "Please select a membership type.")
+            return render(request, "sign_up.html", {
+                "email": email,
+                "membership": membership,
+                "interest": interest,
+            })
+        
+        if not verify_password:
+            messages.error(request, "Please re-type the password.")
+            return render(request, "sign_up.html", {
+                "email": email,
+                "membership": membership,
+                "interest": interest,
+            })
+        
+        if verify_password != password:
+            messages.error(request, "Passwords do not match.")
             return render(request, "sign_up.html", {
                 "email": email,
                 "membership": membership,
@@ -61,7 +78,7 @@ def sign_up(request):
             login(request, user)
 
             messages.success(request, "Welcome to TogetherHub!")
-            return redirect('dashboard')  # Redirect to homepage
+            return redirect('dashboard')  # Redirecting to homepage
 
     return render(request, "sign_up.html")
 

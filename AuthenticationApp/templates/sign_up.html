@@ -85,6 +85,9 @@
                 <input type="password" class="form-control" name="password" placeholder="Password" required>
             </div>
             <div class="mb-3">
+                <input type="password" class="form-control" name="verify_password" placeholder="Re-enter Password" required>
+            </div>
+            <div class="mb-3">
                 <select class="form-control" name="membership" required>
                     <option value="" {% if membership == "" %}selected disabled {% endif %}>Select membership</option>
                     <option value="Basic" {% if membership == "Basic" %}selected{% endif %}>Basic</option>
