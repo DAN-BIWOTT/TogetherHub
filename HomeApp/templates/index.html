@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TogetherHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: #f8f9fa;
+        }
+        .btn-custom {
+            background-color: #000;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #444;
+        }
+        .section-title {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .card {
+            padding: 20px;
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">TogetherHub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Membership</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
+                </ul>
+                <a href="auth/sign_in/" class="btn btn-outline-dark ms-3">Login</a>
+                <a href="auth/sign_up/" class="btn btn-dark ms-2">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="fw-bold">Building a More Equitable & Creative Economy</h1>
+        <p class="lead">Join a membership community that fosters creativity, collaboration, and positive change.</p>
+        <a href="#" class="btn btn-dark btn-lg">Become a Member</a>
+        <a href="#" class="btn btn-outline-dark btn-lg ms-2">Learn More</a>
+    </section>
+
+    <!-- How it Works -->
+    <section class="container my-5 text-center">
+        <h2 class="section-title">How it Works</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <strong>Join the Community</strong>
+                    <p>Sign up & express your interests.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <strong>Engage & Participate</strong>
+                    <p>Attend events, book digital modules.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <strong>Grow & Connect</strong>
+                    <p>Track benefits & connect with members.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Membership Benefits -->
+    <section class="container my-5 text-center">
+        <h2 class="section-title">Membership Benefits</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <strong>Event Access</strong>
+                    <p>Workshops, discussions, and more.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <strong>Creative Workspace</strong>
+                    <p>Access co-working spaces.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <strong>Skill Development</strong>
+                    <p>Structured content modules.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <strong>Community Connections</strong>
+                    <p>Network with creatives.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Events -->
+    <section class="container my-5 text-center">
+        <h2 class="section-title">Upcoming Events</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">Upcoming Event 1</div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">Upcoming Event 2</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Signup -->
+    <section class="container my-5 text-center">
+        <h2 class="section-title">Sign up for our Newsletter</h2>
+        <form class="d-flex justify-content-center">
+            <input type="email" class="form-control w-50" placeholder="Enter your email address">
+            <button class="btn btn-dark ms-2">Subscribe</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light text-center py-4">
+        <p>&copy; 2025 TogetherHub. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
