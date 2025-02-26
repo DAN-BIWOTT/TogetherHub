@@ -1,0 +1,34 @@
+{% extends "components/DashboardLayout.html" %}
+
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="container">
+        <!-- User Information Card -->
+        <div class="profile-card">
+            <h3 class="text-center">User Profile</h3>
+            <p><strong>Name:</strong> {{ user.name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Location:</strong> {{ user.location }}</p>
+        </div>
+    
+        <!-- Interests Selection -->
+        <h4 class="text-center">Select Your Interests</h4>
+        <input type="text" class="search-box" placeholder="Search interests..." onkeyup="filterInterests()">
+    
+        <div class="d-flex flex-wrap justify-content-center" id="interests-container">
+            {% for interest in interests %}
+                <div class="interest" onclick="toggleSelection(this)">{{ interest }}</div>
+            {% endfor %}
+        </div>
+    
+        <div class="text-center mt-4">
+            <button class="btn btn-primary" onclick="saveInterests()">Save Interests</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<script>
+      
+    
+</script>
