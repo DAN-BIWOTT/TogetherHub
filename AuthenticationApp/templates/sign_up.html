@@ -20,6 +20,7 @@
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
+            position: relative; /* Added for positioning the back button inside the container */
         }
         .btn-primary {
             background-color: #5a55e0;
@@ -66,10 +67,30 @@
             transform: translateX(-50%);
             z-index: 1050;
         }
+        /* Style for the back button inside the box */
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #f1f1f1;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .back-button i {
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <div class="signup-container">
+        <!-- Back Button inside the box -->
+        <button class="back-button" onclick="window.history.back();">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+
         <a href="/">
             <img src="{% static 'images/logo.png' %}" alt="TogetherHub" class="mb-3" width="50">
         </a>
@@ -78,6 +99,12 @@
 
         <form method="post" action="{% url 'sign_up' %}">
             {% csrf_token %}
+            <div class="mb-3">
+                <input type="fisrtname" class="form-control" name="firstname" placeholder="First Name" required>
+            </div>
+            <div class="mb-3">
+                <input type="lastname" class="form-control" name="lastname" placeholder="Last Name" required>
+            </div>
             <div class="mb-3">
                 <input type="email" class="form-control" name="email" placeholder="Email" required value="{{ email }}">
             </div>

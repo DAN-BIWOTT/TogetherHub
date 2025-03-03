@@ -16,6 +16,8 @@ class CustomUser(AbstractUser):
 
     membership = models.CharField(max_length=20, choices=MEMBERSHIP_CHOICES, default='Basic')
     interest = models.CharField(max_length=20, choices=INTEREST_CHOICES, default='Technology')
+    firstname = models.CharField(max_length=20, default='Guest')
+    lastname = models.CharField(max_length=20, default="-")
 
     def __str__(self):
         return self.username

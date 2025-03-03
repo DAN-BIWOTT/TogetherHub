@@ -29,6 +29,8 @@ def sign_in(request):
 
 def sign_up(request):
     if request.method == 'POST':
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
         email = request.POST.get('email')
         password = request.POST.get('password')
         verify_password = request.POST.get('verify_password')
@@ -71,7 +73,7 @@ def sign_up(request):
             messages.error(request, "Email is already registered")
         else:
             # Create user with extra fields
-            user = CustomUser.objects.create_user(username=email, email=email, password=password, membership=membership, interest=interest)
+            user = CustomUser.objects.create_user(username=email, email=email, password=password, membership=membership, interest=interest, firstname=firstname, lastname=lastname)
             user.save()
     
             # Auto-login after sign-up
