@@ -18,7 +18,6 @@ def profile(request):
         # Handle the form submission to update the profile
         print(request.POST)  # Log POST data for debugging purposes
 
-        # Update profile-related fields if you have a related Profile model
         user.phonenumber = request.POST.get('phone', user.phonenumber)
         user.location = request.POST.get('location', user.location)
         user.membership = request.POST.get('membership', user.membership)
@@ -47,9 +46,9 @@ def profile(request):
         'INTEREST_CHOICES': CustomUser.INTEREST_CHOICES,
     })
 
-# @login_required
-# def workspace_view(request):
-#     if request.user.membership == 'workspace':  # Only for Creative Workspace Members
-#         return render(request, 'workspace.html')
-#     else:
-#         return redirect('no_access')  # Redirect users without access
+@login_required
+def workspace_view(request):
+    if request.user.membership == 'workspace':  # Only for Creative Workspace Members
+        return render(request, 'workspace.html')
+    else:
+        return redirect('no_access')  # Redirect users without access
