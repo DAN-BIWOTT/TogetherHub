@@ -8,11 +8,11 @@ from django.contrib.auth.decorators import login_required
 import sys
 
 def sign_in(request):
-    
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user = authenticate(request, username=email, password=password)
+        # No need to pass 'username' anymore, just 'email'
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)

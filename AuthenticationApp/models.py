@@ -40,6 +40,23 @@ class CustomUser(AbstractUser):
     interest = models.CharField(max_length=255, choices=INTEREST_CHOICES, default='Technology')
     firstname = models.CharField(max_length=20, default='Guest')
     lastname = models.CharField(max_length=20, default="-")
+    
+    email = models.EmailField(unique=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.username:  # If username is empty, generate from email
+            base_username = self.email.split("@")[0]
+            unique_username = base_username
+            counter = 1
+            
+            # Ensure the username is unique
+            while CustomUser.objects.filter(username=unique_username).exists():
+                unique_username = f"{base_username}{counter}"
+                counter += 1
 
+            self.username = unique_username
+
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return self.username

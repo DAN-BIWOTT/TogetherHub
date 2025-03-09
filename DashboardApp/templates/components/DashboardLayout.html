@@ -177,11 +177,23 @@
     <div class="sidebar">
         <div class="sidebar-top">
             <h4>TogetherHub</h4>
-            <a href="#" class="active"><i class="fa-solid fa-users"></i> Members</a>
-            <a href="#"><i class="fa-solid fa-calendar-days"></i> Events</a>
-            <a href="#"><i class="fa-solid fa-tasks"></i> Tasks</a>
-            <a href="#"><i class="fa-solid fa-chart-bar"></i> Reporting</a>
-            <a href="#"><i class="fa-solid fa-user"></i> Users</a>
+            {% if request.user.membership == "admin" %}    
+                <a href="#" class="active"><i class="fa-solid fa-users"></i> Members</a>
+                <a href="#"><i class="fa-solid fa-tasks"></i> Tasks</a>
+            {% endif %}
+
+            {% if request.user.membership == "community" or request.user.membership == "key_access" %}     
+                <a href="#"><i class="fa-solid fa-calendar-days"></i> Both Com and Key</a>
+            {% endif %}
+
+            {% if request.user.membership == "key_access" %}
+                <a href="#"><i class="fa-solid fa-chart-bar"></i> Just Key Access</a>
+            {% endif %}
+
+            {% if request.user.membership == "workspace" %}
+                <a href="#"><i class="fa-solid fa-user"></i> Just Workspace</a>
+            {% endif %}
+
         </div>
         <div class="sidebar-bottom">
             <a href="#"><i class="fa-solid fa-bell"></i> Notifications</a>

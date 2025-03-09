@@ -5,4 +5,5 @@ from .views import profile
 urlpatterns = [
     path('', dashboard, name='dashboard'),
     path('profile/', profile, name='profile'),
+    path('manageUsers/', profile, name='profile'),
     ]
