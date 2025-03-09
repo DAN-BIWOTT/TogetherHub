@@ -9,8 +9,6 @@ def dashboard(request):
 
 @login_required
 def profile(request):
-    interests = ["Technology", "Photography", "Gaming", "Cooking", "Fitness", 
-                 "Travel", "Fashion", "Music", "Art", "Writing", "DIY", "Coding"]
 
     user = request.user  # Get the currently logged-in user
     
@@ -48,8 +46,15 @@ def profile(request):
     })
 
 @login_required
-def manage_new_sign_ups(request):
+def manage_users(request):
     if request.user.membership == 'admin':
         return render(request, 'manageUsers.html')
+    else:
+        return redirect('no_access')  # Redirect users without access@login_required
+
+@login_required
+def adminHome(request):
+    if request.user.membership == 'admin':
+        return render(request, 'adminHome.html')
     else:
         return redirect('no_access')  # Redirect users without access
