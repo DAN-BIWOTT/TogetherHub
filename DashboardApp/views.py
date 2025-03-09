@@ -43,7 +43,7 @@ def profile(request):
     return render(request, 'profile.html', {
         'user': user,
         'MEMBERSHIP_CHOICES': CustomUser.MEMBERSHIP_CHOICES,
-        'INTEREST_CHOICES': CustomUser.INTEREST_CHOICES,
+        'interests': CustomUser.INTEREST_CHOICES,
     })
 
 # @login_required

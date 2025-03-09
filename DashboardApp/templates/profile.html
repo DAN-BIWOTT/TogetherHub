@@ -84,10 +84,13 @@
                 <h4 class="text-center">Select Your Interests</h4>
                 <input type="text" class="form-control mb-3" id="interest-search" placeholder="Search interests..." onkeyup="filterInterests()">
                 <div class="d-flex flex-wrap justify-content-center" id="interests-container">
-                    {% for interest in interests %}
-                        <div class="interest m-2 p-2 border rounded" onclick="toggleSelection(this)">{{ interest }}</div>
+                    {% for value, label in interests %}
+                        <div class="interest m-2 p-2 border rounded" onclick="toggleSelection(this)">
+                            {{ label }}
+                        </div>
                     {% endfor %}
                 </div>
+                
                 <div class="text-center mt-4">
                     <button class="btn btn-primary" onclick="saveInterests()">Save Interests</button>
                 </div>
