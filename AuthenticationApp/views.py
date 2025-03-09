@@ -17,7 +17,10 @@ def sign_in(request):
         if user is not None:
             login(request, user)
             messages.success(request, '🎉 Welcome back! You have successfully logged in.')
-            return redirect('dashboard')  # Redirect to home/dashboard
+            if user.membership == "admin":
+                return redirect('adminHome')
+            else:
+                return redirect('dashboard')  # Redirect to home/dashboard
         else:
             messages.error(request, '⚠️ Invalid email or password')
 

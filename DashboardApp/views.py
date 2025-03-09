@@ -46,8 +46,15 @@ def profile(request):
     })
 
 @login_required
-def manage_new_sign_ups(request):
+def manage_users(request):
     if request.user.membership == 'admin':
         return render(request, 'manageUsers.html')
+    else:
+        return redirect('no_access')  # Redirect users without access@login_required
+
+@login_required
+def adminHome(request):
+    if request.user.membership == 'admin':
+        return render(request, 'adminHome.html')
     else:
         return redirect('no_access')  # Redirect users without access
