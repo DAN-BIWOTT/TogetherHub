@@ -16,6 +16,7 @@ def profile(request):
         # Handle the form submission to update the profile
         print(request.POST)  
 
+        # Update profile-related fields if you have a related Profile model
         user.phonenumber = request.POST.get('phone', user.phonenumber)
         user.location = request.POST.get('location', user.location)
         user.membership = request.POST.get('membership', user.membership)
