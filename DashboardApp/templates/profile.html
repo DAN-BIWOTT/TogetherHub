@@ -1,34 +1,101 @@
 {% extends "components/DashboardLayout.html" %}
-
+{% load static %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-<div class="row">
-    <div class="container">
-        <!-- User Information Card -->
-        <div class="profile-card">
-            <h3 class="text-center">User Profile</h3>
-            <p><strong>Name:</strong> {{ user.name }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Location:</strong> {{ user.location }}</p>
-        </div>
-    
-        <!-- Interests Selection -->
-        <h4 class="text-center">Select Your Interests</h4>
-        <input type="text" class="search-box" placeholder="Search interests..." onkeyup="filterInterests()">
-    
-        <div class="d-flex flex-wrap justify-content-center" id="interests-container">
-            {% for interest in interests %}
-                <div class="interest" onclick="toggleSelection(this)">{{ interest }}</div>
-            {% endfor %}
-        </div>
-    
-        <div class="text-center mt-4">
-            <button class="btn btn-primary" onclick="saveInterests()">Save Interests</button>
+<style>
+    .profile-card {
+        border-radius: 15px;
+        background: #fff;
+        text-align: center;
+    }
+    .profile-img {
+        width: 120px;
+        height: 120px;
+        border: 4px solid #007bff;
+        padding: 3px;
+    }
+    .profile-details p {
+        font-size: 16px;
+        margin: 10px 0;
+    }
+    .interest {
+        cursor: pointer;
+        padding: 8px 12px;
+        border: 1px solid #007bff;
+        border-radius: 20px;
+        background: #f1f1f1;
+        transition: 0.3s;
+        font-size: 14px;
+    }
+    .interest.selected {
+        background: #007bff;
+        color: white;
+    }
+</style>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- User Profile Card -->
+            <div class="card profile-card shadow p-4">
+                <div class="text-center">
+                    <img src="{% static 'images/Avatar1.jpg' %}" alt="User Image" id="profile_image" class="rounded-circle img-fluid profile-img">
+                    <h3 class="mt-3" id="name-display">{{ user.firstname }} {{ user.lastname }}</h3>
+                    <p class="text-muted" id="occupation-display">{{ user.occupation|default:"No Occupation" }}
+                    </p>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="enableEditMode()">Edit Profile</button>
+                </div>
+                <hr>
+                <div class="profile-details">
+                    <p><i class="fas fa-envelope"></i> <strong>Email:</strong> <span id="email-display">{{ user.email }}</span></p>
+                    <p><i class="fas fa-phone"></i> <strong>Phone Number:</strong> <span id="phone-display">{{ user.phonenumber }}</span></p>
+                    <p><i class="fas fa-map-marker-alt"></i> <strong>Location:</strong> <span id="location-display">{{ user.location }}</span></p>
+                    <p><i class="fas fa-industry"></i> <strong>occupation:</strong> <span id="occupation-display">{{ user.occupation }}</span></p>
+                    <p><i class="fas fa-id-badge"></i> <strong>Membership Type:</strong> <span id="membership-display">{{ user.membership }}</span></p>
+                    <p><i class="fas fa-tools"></i> <strong>Skills:</strong> <span id="skills-display">{{ user.skills }}</span></p>
+                    <p><i class="fas fa-heart"></i> <strong>Interests:</strong> <span id="interests-display">{{ user.interest }}</span></p>
+                    <p><i class="fas fa-link"></i> <strong>Social Links:</strong>
+                        <a href="{{ user.linkedin }}" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
+                        <a href="{{ user.github }}" target="_blank" class="btn btn-outline-dark btn-sm">GitHub</a>
+                    </p>
+                </div>
+                <!-- Edit Mode -->
+                <div id="edit-form" style="display: none;">
+                    <form action="" method="POST"> <!-- the action being empty means we are submitting to the same file. profile. -->
+                        {% csrf_token %}
+                        <input type="text" name="occupation" id="occupation-input" class="form-control my-2" placeholder="Occupation">
+                        <input type="text" name="phone" id="phone-input" class="form-control my-2" placeholder="Phone Number">
+                        <input type="text" name="location" id="location-input" class="form-control my-2" placeholder="Location">
+                            <select class="form-control my-2" id="membership-input" name="membership" required>
+                                <option value="" {% if membership == "" %}selected disabled {% endif %}>Select membership</option>
+                                <option value="community" {% if membership == "community" %}selected{% endif %}>Community Member</option>
+                                <option value="key_access" {% if membership == "key_access" %}selected{% endif %}>Key Access Member</option>
+                                <option value="workspace" {% if membership == "workspace" %}selected{% endif %}>Creative Workspace Member</option>
+                            </select>
+                        
+                        <input type="text" name="skills" id="skills-input" class="form-control my-2" placeholder="Skills">
+                        <button class="btn btn-success" onclick="saveProfileChanges()">Save</button>
+                        <button class="btn btn-secondary" onclick="disableEditMode()">Cancel</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Interests Selection -->
+            <div class="card mt-4 p-4 shadow">
+                <h4 class="text-center">Select Your Interests</h4>
+                <input type="text" class="form-control mb-3" id="interest-search" placeholder="Search interests..." onkeyup="filterInterests()">
+                <div class="d-flex flex-wrap justify-content-center" id="interests-container">
+                    {% for interest in interests %}
+                        <div class="interest m-2 p-2 border rounded" onclick="toggleSelection(this)">{{ interest }}</div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary" onclick="saveInterests()">Save Interests</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 {% endblock %}
-<script>
-      
-    
-</script>
+
+
+
