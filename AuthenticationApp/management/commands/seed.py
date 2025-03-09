@@ -5,12 +5,12 @@ class Command(BaseCommand):
     help = "Seeds the database with an admin user"
 
     def handle(self, *args, **options):
-        if not CustomUser.objects.filter(email="admin2@gmail.com").exists():
+        if not CustomUser.objects.filter(email="admin@gmail.com").exists():
             CustomUser.objects.create_superuser(
-                email="admin2@gmail.com",
+                email="admin@gmail.com",
                 password="123",
                 membership="admin",
-                username="admin2"
+                username="admin"
             )
             self.stdout.write(self.style.SUCCESS("✅ Superuser created successfully!"))
         else:
