@@ -46,9 +46,9 @@ def profile(request):
         'INTEREST_CHOICES': CustomUser.INTEREST_CHOICES,
     })
 
-@login_required
-def workspace_view(request):
-    if request.user.membership == 'workspace':  # Only for Creative Workspace Members
-        return render(request, 'workspace.html')
-    else:
-        return redirect('no_access')  # Redirect users without access
+# @login_required
+# def workspace_view(request):
+#     if request.user.membership == 'workspace':  # Only for Creative Workspace Members
+#         return render(request, 'workspace.html')
+#     else:
+#         return redirect('no_access')  # Redirect users without access
