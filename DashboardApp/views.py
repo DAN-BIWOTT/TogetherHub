@@ -52,10 +52,3 @@ def workspace_view(request):
         return render(request, 'workspace.html')
     else:
         return redirect('no_access')  # Redirect users without access
-    
-@login_required
-def key_access(request):
-    if request.user.membership == 'key_access':  # Only for Creative Workspace Members
-        return render(request, 'key_access.html')
-    else:
-        return redirect('no_access')  # Redirect users without access
