@@ -40,6 +40,7 @@ class CustomUser(AbstractUser):
     interest = models.CharField(max_length=255, choices=INTEREST_CHOICES, default='Technology')
     firstname = models.CharField(max_length=20, default='Guest')
     lastname = models.CharField(max_length=20, default="-")
+    approvedmember = models.BooleanField(default=False)
     
     email = models.EmailField(unique=True)
     

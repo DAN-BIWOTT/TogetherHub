@@ -173,13 +173,15 @@
 </style>
     </style>
 </head>
-<body>
+<body>  
     <div class="sidebar">
         <div class="sidebar-top">
             <h4>TogetherHub</h4>
-            {% if request.user.membership == "admin" %}    
-                <a href="#" class="active"><i class="fa-solid fa-users"></i> Members</a>
-                <a href="#"><i class="fa-solid fa-tasks"></i> Tasks</a>
+            {% if request.user.membership == "admin" %}
+                <a href="{% url 'adminHome' %}"><i class="fa-solid fa-home"></i> Home</a>
+                <a href="{% url 'manageUsers' %}"><i class="fa-solid fa-user-plus"></i> Manage Users</a>
+                <a href="#"><i class="fa-solid fa-users"></i> Members</a>
+                <a href="#"><i class="fa-solid fa-calendar"></i> Events</a>
             {% endif %}
 
             {% if request.user.membership == "community" or request.user.membership == "key_access" %}     
@@ -221,8 +223,9 @@
     </div>
 
     <div class="main-content">
-        
+        {% if request.user.approvedmember == False %}   
         <div class="info-banner">Complete your profile to speed up admin approval.</div>
+        {% endif %}
         <h2>
             {% block title %}Dashboard{% endblock %}
         </h2>
