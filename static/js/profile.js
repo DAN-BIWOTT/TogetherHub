@@ -22,28 +22,42 @@ function saveProfileChanges() {
     document.getElementById("skills-display").innerText = document.getElementById("skills-input").value;
     disableEditMode();
 }
+// 
+let selectedInterests = [];
 
- // Search interest
- function toggleSelection(element) {
+function toggleSelection(element) {
+    // Toggle the 'selected' class
     element.classList.toggle('selected');
-}
 
-function filterInterests() {
-    let input = document.getElementById('interest-search'); // Get by ID
+    // Get the value of the clicked interest
+    const interestValue = element.getAttribute('data-value');
 
-    if (!input) {
-        console.error("Interest search input field not found.");
-        return;
+    // Add or remove the interest from the selectedInterests array
+    if (selectedInterests.includes(interestValue)) {
+        selectedInterests = selectedInterests.filter(item => item !== interestValue);
+    } else {
+        selectedInterests.push(interestValue);
     }
 
-    let filterValue = input.value.toLowerCase();
-    let interests = document.querySelectorAll('.interest');
+    // Update the hidden input field with the selected interests
+    document.getElementById('selected-interests').value = selectedInterests.join(',');
+}
 
-    interests.forEach(interest => {
-        let text = interest.textContent.toLowerCase();
-        interest.style.display = text.includes(filterValue) ? "inline-block" : "none";
+// Optional: Filter interests when typing in the search box
+function filterInterests() {
+    const searchTerm = document.getElementById('interest-search').value.toLowerCase();
+    const interestElements = document.querySelectorAll('.interest');
+
+    interestElements.forEach(interest => {
+        const label = interest.textContent.toLowerCase();
+        if (label.includes(searchTerm)) {
+            interest.style.display = 'block';
+        } else {
+            interest.style.display = 'none';
+        }
     });
 }
+
 
 
 function saveInterests() {

@@ -9,14 +9,12 @@ def dashboard(request):
 
 @login_required
 def profile(request):
-    interests = ["Technology", "Photography", "Gaming", "Cooking", "Fitness", 
-                 "Travel", "Fashion", "Music", "Art", "Writing", "DIY", "Coding"]
 
     user = request.user  # Get the currently logged-in user
     
     if request.method == "POST":
         # Handle the form submission to update the profile
-        print(request.POST)  # Log POST data for debugging purposes
+        print(request.POST)  
 
         # Update profile-related fields if you have a related Profile model
         user.phonenumber = request.POST.get('phone', user.phonenumber)
@@ -24,27 +22,27 @@ def profile(request):
         user.membership = request.POST.get('membership', user.membership)
         user.occupation = request.POST.get('occupation', user.occupation)
         user.skills = request.POST.get('skills', user.skills)
-        
-        # Handle the membership and interest selections
+        user.interest = request.POST.get('interests', '').split(',')
         user.membership = request.POST.get('membership', user.membership)
-        user.interest = request.POST.get('interest', user.interest)
 
         # Save the changes
         user.save()
         print(user)
-        print(f"Updated user: {user.phonenumber}, {user.location}, {user.membership}, {user.occupation}, {user.skills}")  # Log updated user details
+        print(f"Updated user: {user.interest},{user.phonenumber}, {user.location}, {user.membership}, {user.occupation}, {user.skills}")  # Log updated user details
 
         # Display a success message
         messages.success(request, "Your profile has been updated successfully!")
 
         # Redirect to the same profile page
         return redirect('profile')  # Redirect back to the profile page
+    # patch for the interest list.
+    user_interests = user.interest.strip("[]").replace("'","").split(',')
 
-    # For GET request, just render the profile page
     return render(request, 'profile.html', {
         'user': user,
         'MEMBERSHIP_CHOICES': CustomUser.MEMBERSHIP_CHOICES,
         'interests': CustomUser.INTEREST_CHOICES,
+        'user_interests':user_interests
     })
 
 @login_required
