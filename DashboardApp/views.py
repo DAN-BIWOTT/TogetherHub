@@ -48,13 +48,46 @@ def profile(request):
 @login_required
 def manage_users(request):
     if request.user.membership == 'admin':
-        return render(request, 'manageUsers.html')
+        # We get all users from the db
+        allUsers = CustomUser.objects.order_by('-created_at').exclude(membership="admin")
+        
+        return render(request, 'manageUsers.html', {
+            "allUsers":allUsers,
+            })
     else:
         return redirect('no_access')  # Redirect users without access@login_required
 
 @login_required
 def adminHome(request):
     if request.user.membership == 'admin':
-        return render(request, 'adminHome.html')
+        allUsers = CustomUser.objects.order_by('-created_at').exclude(membership="admin") # The - sign orders it in descending order.
+        sampleUsers = allUsers[:5]
+        community_member_count = allUsers.filter(membership="Community").count()
+        key_access_count = allUsers.filter(membership="Key Access").count()
+        workspace_count = allUsers.filter(membership="Workspace").count()
+        print(f"This is the count: ", {workspace_count})
+
+        return render(request, 'adminHome.html', {
+            "sampleUsers":sampleUsers,
+            "community_member_count":community_member_count,
+            "key_access_count":key_access_count,
+            "workspace_count":workspace_count,
+            })
     else:
         return redirect('no_access')  # Redirect users without access
+    
+@login_required
+def manageEvents(request):
+    if request.user.membership == 'admin':
+        print('here at events')
+        return render(request, 'manageEvents.html')
+    else:
+        return redirect('no_access')
+    
+@login_required
+def manageMembers(request):
+    if request.user.membership == 'admin':
+        print('here at events')
+        return render(request, 'manageMembers.html')
+    else:
+        return redirect('no_access')

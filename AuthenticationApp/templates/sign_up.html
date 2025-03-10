@@ -117,9 +117,9 @@
             <div class="mb-3">
                 <select class="form-control" name="membership" required>
                     <option value="" {% if membership == "" %}selected disabled {% endif %}>Select membership</option>
-                    <option value="Basic" {% if membership == "Basic" %}selected{% endif %}>Basic</option>
-                    <option value="Premium" {% if membership == "Premium" %}selected{% endif %}>Premium</option>
-                    <option value="Enterprise" {% if membership == "Enterprise" %}selected{% endif %}>Enterprise</option>
+                    <option value="Community" {% if membership == "Community" %}selected{% endif %}>Community</option>
+                    <option value="Key Access" {% if membership == "Key Access" %}selected{% endif %}>Key Access</option>
+                    <option value="Workspace" {% if membership == "Workspace" %}selected{% endif %}>Workspace</option>
                 </select>
             </div>
             <div class="mb-3">

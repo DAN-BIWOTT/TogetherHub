@@ -3,9 +3,9 @@ from django.db import models
 
 class CustomUser(AbstractUser):
     MEMBERSHIP_CHOICES = [
-       ('community', 'Community Member'),
-        ('key_access', 'Key Access Member'),
-        ('workspace', 'Creative Workspace Member'),
+       ('Community', 'Community Member'),
+        ('Key Access', 'Key Access Member'),
+        ('Workspace', 'Creative Workspace Member'),
     ]
 
     INTEREST_CHOICES = [
@@ -41,6 +41,7 @@ class CustomUser(AbstractUser):
     firstname = models.CharField(max_length=20, default='Guest')
     lastname = models.CharField(max_length=20, default="-")
     approvedmember = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     email = models.EmailField(unique=True)
     
