@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 password="123",
                 membership="admin",
                 username="admin",
-                approvedmember=True
+                approvedmember=True,
             )
             self.stdout.write(self.style.SUCCESS("✅ Superuser created successfully!"))
         else:
