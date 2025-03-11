@@ -179,7 +179,7 @@
             <h4>TogetherHub</h4>
             {% if request.user.membership == "admin" %}
                 <a href="{% url 'adminHome' %}"><i class="fa-solid fa-home"></i> Home</a>
-                <a href="{% url 'manageUsers' %}"><i class="fa-solid fa-user-plus"></i> Manage Users</a>
+                <a href="{% url 'manageUsers' %}"><i class="fa-solid fa-user-plus"></i> Manage New Users</a>
                 <a href="{% url 'manageMembers' %}"><i class="fa-solid fa-users"></i> Members</a>
                 <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-calendar"></i> Events</a>
             {% endif %}

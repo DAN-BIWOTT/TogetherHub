@@ -91,26 +91,12 @@ def change_approval_state(request):
 @login_required
 def adminHome(request):
     if request.user.membership == 'admin':
-<<<<<<< HEAD
+
         allUsers = CustomUser.objects.order_by('created_at').exclude(membership="admin") # The - sign orders it in descending order.
-=======
-<<<<<<< HEAD
-        allUsers = CustomUser.objects.order_by('created_at').exclude(membership="admin") # The - sign orders it in descending order.
-=======
-        allUsers = CustomUser.objects.order_by('-created_at').exclude(membership="admin") # The - sign orders it in descending order.
->>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
->>>>>>> 450a417e85df72b07a23222f06071b6bfc566a32
         sampleUsers = allUsers[:5]
         community_member_count = allUsers.filter(membership="Community").count()
         key_access_count = allUsers.filter(membership="Key Access").count()
         workspace_count = allUsers.filter(membership="Workspace").count()
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-        print(f"This is the count: ", {workspace_count})
->>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
->>>>>>> 450a417e85df72b07a23222f06071b6bfc566a32
 
         return render(request, 'adminHome.html', {
             "sampleUsers":sampleUsers,
@@ -132,26 +118,12 @@ def manageEvents(request):
 @login_required
 def manageMembers(request):
     if request.user.membership == 'admin':
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 450a417e85df72b07a23222f06071b6bfc566a32
+
         # We get all users from the db
         allMembers = CustomUser.objects.order_by('created_at').exclude(Q(membership="admin") | Q(approvedmember=False)) # The Q is necessary. I don't know why but it is. 🤦‍♂️
         
         return render(request, 'manageMembers.html', {
             "allMembers": allMembers,
             })
-<<<<<<< HEAD
-    else:
-        return redirect('no_access')  # Redirect users without access@login_required
-=======
-    else:
-        return redirect('no_access')  # Redirect users without access@login_required
-=======
-        print('here at events')
-        return render(request, 'manageMembers.html')
     else:
         return redirect('no_access')
->>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
->>>>>>> 450a417e85df72b07a23222f06071b6bfc566a32
