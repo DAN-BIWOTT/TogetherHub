@@ -1,8 +1,13 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from AuthenticationApp.models import CustomUser
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
+# MANAGE USERS 🥸
 @login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
@@ -33,7 +38,7 @@ def profile(request):
         # Display a success message
         messages.success(request, "Your profile has been updated successfully!")
 
-        # Redirect to the same profile page
+        # Redirect to the same profile page ➡️
         return redirect('profile')  # Redirect back to the profile page
     # patch for the interest list.
     user_interests = user.interest.strip("[]").replace("'","").split(',')
@@ -45,11 +50,16 @@ def profile(request):
         'user_interests':user_interests
     })
 
+# MANAGE ADMIN 🤖
 @login_required
 def manage_users(request):
     if request.user.membership == 'admin':
         # We get all users from the db
+<<<<<<< HEAD
+        allUsers = CustomUser.objects.order_by('created_at').exclude(Q(membership="admin") | Q(approvedmember=True)) # The Q is necessary. I don't know why but it is. 🤦‍♂️
+=======
         allUsers = CustomUser.objects.order_by('-created_at').exclude(membership="admin")
+>>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
         
         return render(request, 'manageUsers.html', {
             "allUsers":allUsers,
@@ -58,14 +68,46 @@ def manage_users(request):
         return redirect('no_access')  # Redirect users without access@login_required
 
 @login_required
+def change_approval_state(request):
+        if request.method == "POST":
+                try:
+                    data = json.loads(request.body)
+                    user_id = data.get("user_id")
+                    s = data.get("s")
+                    s = s in ["true", "True", "1"] # We are turning every true string to boolean.
+                    user = CustomUser.objects.get(id=user_id)
+                    user.approvedmember = s
+                    user.save()
+                    if s: 
+                        messages.success(request, f"User {user.username} has been approved!😁")
+                        print("I'm here at True. S: ",s)
+                    else: 
+                        messages.success(request, f"User {user.username} has been banned!🤕")
+                        print("I'm here at False. S: ",s)
+                    return JsonResponse({"success": True, "message": "User made a member successfully."}) if s else JsonResponse({"success": True, "message": "User banned successfully."})
+                except CustomUser.DoesNotExist:
+                    messages.error(request, "User not found.🤷‍♀️")
+                    return JsonResponse({"success": False, "message": "User not found."})
+                except Exception as e:
+                    return JsonResponse({"success": False, "message": str(e)})
+        return JsonResponse({"success": False, "message": "Invalid request method."})
+
+@login_required
 def adminHome(request):
     if request.user.membership == 'admin':
+<<<<<<< HEAD
+        allUsers = CustomUser.objects.order_by('created_at').exclude(membership="admin") # The - sign orders it in descending order.
+=======
         allUsers = CustomUser.objects.order_by('-created_at').exclude(membership="admin") # The - sign orders it in descending order.
+>>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
         sampleUsers = allUsers[:5]
         community_member_count = allUsers.filter(membership="Community").count()
         key_access_count = allUsers.filter(membership="Key Access").count()
         workspace_count = allUsers.filter(membership="Workspace").count()
+<<<<<<< HEAD
+=======
         print(f"This is the count: ", {workspace_count})
+>>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
 
         return render(request, 'adminHome.html', {
             "sampleUsers":sampleUsers,
@@ -87,7 +129,18 @@ def manageEvents(request):
 @login_required
 def manageMembers(request):
     if request.user.membership == 'admin':
+<<<<<<< HEAD
+        # We get all users from the db
+        allMembers = CustomUser.objects.order_by('created_at').exclude(Q(membership="admin") | Q(approvedmember=False)) # The Q is necessary. I don't know why but it is. 🤦‍♂️
+        
+        return render(request, 'manageMembers.html', {
+            "allMembers": allMembers,
+            })
+    else:
+        return redirect('no_access')  # Redirect users without access@login_required
+=======
         print('here at events')
         return render(request, 'manageMembers.html')
     else:
         return redirect('no_access')
+>>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720

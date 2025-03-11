@@ -1,6 +1,6 @@
 {% extends "components/DashboardLayout.html" %}
 {% load static %}
-{% block title %}Manage Users{% endblock %}
+{% block title %}Manage Members{% endblock %}
 {% block content %}
 
 <div class="row">
@@ -17,7 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for user in allUsers %}
+                {% for user in allMembers %}
                 <tr class="border-bottom">
                     <td class="px-4 py-2"><img src="{% static 'images/Avatar1.jpg' %}" alt="Avatar" class="w-8 h-8 rounded-full"></td>
                     <td class="px-4 py-2"> 
@@ -45,6 +45,9 @@
 </div>
 
 <script>
+    // I've refactored the code. It looked worse than it does now.
+    // I can see that there's more that I could do here but... no one
+    // will be judging me for it. I'll probably never come here again anyway🤷‍♂️
     var changeApprovalStateURL = "{% url 'change_approval_state' %}";
     document.querySelectorAll('.ban-button').forEach(button => {
     button.addEventListener('click', function () {
