@@ -180,16 +180,20 @@
             {% if request.user.membership == "admin" %}
                 <a href="{% url 'adminHome' %}"><i class="fa-solid fa-home"></i> Home</a>
                 <a href="{% url 'manageUsers' %}"><i class="fa-solid fa-user-plus"></i> Manage Users</a>
-                <a href="#"><i class="fa-solid fa-users"></i> Members</a>
-                <a href="#"><i class="fa-solid fa-calendar"></i> Events</a>
+                <a href="{% url 'manageMembers' %}"><i class="fa-solid fa-users"></i> Members</a>
+                <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-calendar"></i> Events</a>
             {% endif %}
 
-            {% if request.user.membership == "community" or request.user.membership == "key_access" %}     
-                <a href="#"><i class="fa-solid fa-calendar-days"></i> Both Com and Key</a>
+            {% if request.user.membership != "admin" %}     
+            <a href="#"><i class="fa-solid fa-calendar-days"></i> Events </a>
+            <a href="#"><i class="fa-solid fa-book"></i> Learning</a>
+            <a href="#"><i class="fa-solid fa-registered"></i> Membership</a>
+            <a href="#"><i class="fa-solid fa-network-wired"></i> Community Board </a>
+            <a href="#"><i class="fa-solid fa-message"></i> Messages</a>
             {% endif %}
 
             {% if request.user.membership == "key_access" %}
-                <a href="#"><i class="fa-solid fa-chart-bar"></i> Just Key Access</a>
+                <!-- <a href="#"><i class="fa-solid fa-chart-bar"></i> Just Key Access</a> -->
             {% endif %}
 
             {% if request.user.membership == "workspace" %}
@@ -250,4 +254,5 @@
 
 </body>
 <script src="{% static 'js/profile.js' %}"></script>
+<script src="{% static 'js/manage.js' %}"></script>
 </html>

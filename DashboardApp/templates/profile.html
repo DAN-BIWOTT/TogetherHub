@@ -52,7 +52,13 @@
                     <p><i class="fas fa-industry"></i> <strong>occupation:</strong> <span id="occupation-display">{{ user.occupation }}</span></p>
                     <p><i class="fas fa-id-badge"></i> <strong>Membership Type:</strong> <span id="membership-display">{{ user.membership }}</span></p>
                     <p><i class="fas fa-tools"></i> <strong>Skills:</strong> <span id="skills-display">{{ user.skills }}</span></p>
-                    <p><i class="fas fa-heart"></i> <strong>Interests:</strong> <span id="interests-display">{{ user.interest }}</span></p>
+                    <p><i class="fas fa-heart"></i> <strong>Interests:</strong> <span id="interests-display">
+                        {% for interest in user_interests %}
+                            <div class="interest m-2 p-2 border rounded">
+                                {{ interest }}
+                            </div>
+                        {% endfor %}
+                    </span></p>
                     <p><i class="fas fa-link"></i> <strong>Social Links:</strong>
                         <a href="{{ user.linkedin }}" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
                         <a href="{{ user.github }}" target="_blank" class="btn btn-outline-dark btn-sm">GitHub</a>
@@ -68,8 +74,8 @@
                             <select class="form-control my-2" id="membership-input" name="membership" required>
                                 <option value="" {% if membership == "" %}selected disabled {% endif %}>Select membership</option>
                                 <option value="community" {% if membership == "community" %}selected{% endif %}>Community Member</option>
-                                <option value="key_access" {% if membership == "key_access" %}selected{% endif %}>Key Access Member</option>
-                                <option value="workspace" {% if membership == "workspace" %}selected{% endif %}>Creative Workspace Member</option>
+                                <option value="Key Access" {% if membership == "Key Access" %}selected{% endif %}>Key Access Member</option>
+                                <option value=Wworkspace" {% if membership == "Workspace" %}selected{% endif %}>Creative Workspace Member</option>
                             </select>
                         
                         <input type="text" name="skills" id="skills-input" class="form-control my-2" placeholder="Skills">
@@ -85,15 +91,19 @@
                 <input type="text" class="form-control mb-3" id="interest-search" placeholder="Search interests..." onkeyup="filterInterests()">
                 <div class="d-flex flex-wrap justify-content-center" id="interests-container">
                     {% for value, label in interests %}
-                        <div class="interest m-2 p-2 border rounded" onclick="toggleSelection(this)">
+                        <div class="interest m-2 p-2 border rounded" onclick="toggleSelection(this)" data-value="{{ value }}">
                             {{ label }}
                         </div>
                     {% endfor %}
                 </div>
-                
-                <div class="text-center mt-4">
-                    <button class="btn btn-primary" onclick="saveInterests()">Save Interests</button>
-                </div>
+            
+                <form method="POST" id="interest-form" action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="interests" id="selected-interests">
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary" type="submit">Save Interests</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

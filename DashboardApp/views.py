@@ -1,8 +1,13 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from AuthenticationApp.models import CustomUser
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
+# MANAGE USERS 🥸
 @login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
@@ -14,7 +19,7 @@ def profile(request):
     
     if request.method == "POST":
         # Handle the form submission to update the profile
-        print(request.POST)  # Log POST data for debugging purposes
+        print(request.POST)  
 
         # Update profile-related fields if you have a related Profile model
         user.phonenumber = request.POST.get('phone', user.phonenumber)
@@ -22,39 +27,101 @@ def profile(request):
         user.membership = request.POST.get('membership', user.membership)
         user.occupation = request.POST.get('occupation', user.occupation)
         user.skills = request.POST.get('skills', user.skills)
-        
-        # Handle the membership and interest selections
+        user.interest = request.POST.get('interests', '').split(',')
         user.membership = request.POST.get('membership', user.membership)
-        user.interest = request.POST.get('interest', user.interest)
 
         # Save the changes
         user.save()
         print(user)
-        print(f"Updated user: {user.phonenumber}, {user.location}, {user.membership}, {user.occupation}, {user.skills}")  # Log updated user details
+        print(f"Updated user: {user.interest},{user.phonenumber}, {user.location}, {user.membership}, {user.occupation}, {user.skills}")  # Log updated user details
 
         # Display a success message
         messages.success(request, "Your profile has been updated successfully!")
 
-        # Redirect to the same profile page
+        # Redirect to the same profile page ➡️
         return redirect('profile')  # Redirect back to the profile page
+    # patch for the interest list.
+    user_interests = user.interest.strip("[]").replace("'","").split(',')
 
-    # For GET request, just render the profile page
     return render(request, 'profile.html', {
         'user': user,
         'MEMBERSHIP_CHOICES': CustomUser.MEMBERSHIP_CHOICES,
         'interests': CustomUser.INTEREST_CHOICES,
+        'user_interests':user_interests
     })
 
+# MANAGE ADMIN 🤖
 @login_required
 def manage_users(request):
     if request.user.membership == 'admin':
-        return render(request, 'manageUsers.html')
+        # We get all users from the db
+        allUsers = CustomUser.objects.order_by('created_at').exclude(Q(membership="admin") | Q(approvedmember=True)) # The Q is necessary. I don't know why but it is. 🤦‍♂️
+        
+        return render(request, 'manageUsers.html', {
+            "allUsers":allUsers,
+            })
     else:
         return redirect('no_access')  # Redirect users without access@login_required
 
 @login_required
+def change_approval_state(request):
+        if request.method == "POST":
+                try:
+                    data = json.loads(request.body)
+                    user_id = data.get("user_id")
+                    s = data.get("s")
+                    s = s in ["true", "True", "1"] # We are turning every true string to boolean.
+                    user = CustomUser.objects.get(id=user_id)
+                    user.approvedmember = s
+                    user.save()
+                    if s: 
+                        messages.success(request, f"User {user.username} has been approved!😁")
+                        print("I'm here at True. S: ",s)
+                    else: 
+                        messages.success(request, f"User {user.username} has been banned!🤕")
+                        print("I'm here at False. S: ",s)
+                    return JsonResponse({"success": True, "message": "User made a member successfully."}) if s else JsonResponse({"success": True, "message": "User banned successfully."})
+                except CustomUser.DoesNotExist:
+                    messages.error(request, "User not found.🤷‍♀️")
+                    return JsonResponse({"success": False, "message": "User not found."})
+                except Exception as e:
+                    return JsonResponse({"success": False, "message": str(e)})
+        return JsonResponse({"success": False, "message": "Invalid request method."})
+
+@login_required
 def adminHome(request):
     if request.user.membership == 'admin':
-        return render(request, 'adminHome.html')
+        allUsers = CustomUser.objects.order_by('created_at').exclude(membership="admin") # The - sign orders it in descending order.
+        sampleUsers = allUsers[:5]
+        community_member_count = allUsers.filter(membership="Community").count()
+        key_access_count = allUsers.filter(membership="Key Access").count()
+        workspace_count = allUsers.filter(membership="Workspace").count()
+
+        return render(request, 'adminHome.html', {
+            "sampleUsers":sampleUsers,
+            "community_member_count":community_member_count,
+            "key_access_count":key_access_count,
+            "workspace_count":workspace_count,
+            })
     else:
         return redirect('no_access')  # Redirect users without access
+    
+@login_required
+def manageEvents(request):
+    if request.user.membership == 'admin':
+        print('here at events')
+        return render(request, 'manageEvents.html')
+    else:
+        return redirect('no_access')
+    
+@login_required
+def manageMembers(request):
+    if request.user.membership == 'admin':
+        # We get all users from the db
+        allMembers = CustomUser.objects.order_by('created_at').exclude(Q(membership="admin") | Q(approvedmember=False)) # The Q is necessary. I don't know why but it is. 🤦‍♂️
+        
+        return render(request, 'manageMembers.html', {
+            "allMembers": allMembers,
+            })
+    else:
+        return redirect('no_access')  # Redirect users without access@login_required
