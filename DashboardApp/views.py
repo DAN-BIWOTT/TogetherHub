@@ -55,7 +55,11 @@ def profile(request):
 def manage_users(request):
     if request.user.membership == 'admin':
         # We get all users from the db
+<<<<<<< HEAD
         allUsers = CustomUser.objects.order_by('created_at').exclude(Q(membership="admin") | Q(approvedmember=True)) # The Q is necessary. I don't know why but it is. 🤦‍♂️
+=======
+        allUsers = CustomUser.objects.order_by('-created_at').exclude(membership="admin")
+>>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
         
         return render(request, 'manageUsers.html', {
             "allUsers":allUsers,
@@ -91,11 +95,19 @@ def change_approval_state(request):
 @login_required
 def adminHome(request):
     if request.user.membership == 'admin':
+<<<<<<< HEAD
         allUsers = CustomUser.objects.order_by('created_at').exclude(membership="admin") # The - sign orders it in descending order.
+=======
+        allUsers = CustomUser.objects.order_by('-created_at').exclude(membership="admin") # The - sign orders it in descending order.
+>>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
         sampleUsers = allUsers[:5]
         community_member_count = allUsers.filter(membership="Community").count()
         key_access_count = allUsers.filter(membership="Key Access").count()
         workspace_count = allUsers.filter(membership="Workspace").count()
+<<<<<<< HEAD
+=======
+        print(f"This is the count: ", {workspace_count})
+>>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
 
         return render(request, 'adminHome.html', {
             "sampleUsers":sampleUsers,
@@ -117,6 +129,7 @@ def manageEvents(request):
 @login_required
 def manageMembers(request):
     if request.user.membership == 'admin':
+<<<<<<< HEAD
         # We get all users from the db
         allMembers = CustomUser.objects.order_by('created_at').exclude(Q(membership="admin") | Q(approvedmember=False)) # The Q is necessary. I don't know why but it is. 🤦‍♂️
         
@@ -125,3 +138,9 @@ def manageMembers(request):
             })
     else:
         return redirect('no_access')  # Redirect users without access@login_required
+=======
+        print('here at events')
+        return render(request, 'manageMembers.html')
+    else:
+        return redirect('no_access')
+>>>>>>> 5559b8e76a04c5b04b7d7f70070990ab04704720
