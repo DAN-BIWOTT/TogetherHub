@@ -97,23 +97,18 @@ def adminHome(request):
         community_member_count = allUsers.filter(membership="Community").count()
         key_access_count = allUsers.filter(membership="Key Access").count()
         workspace_count = allUsers.filter(membership="Workspace").count()
+        new_users_count = allUsers.filter(approvedmember=False).count()
 
         return render(request, 'adminHome.html', {
             "sampleUsers":sampleUsers,
             "community_member_count":community_member_count,
             "key_access_count":key_access_count,
             "workspace_count":workspace_count,
+            "new_users_count":new_users_count,
             })
     else:
         return redirect('no_access')  # Redirect users without access
     
-@login_required
-def manageEvents(request):
-    if request.user.membership == 'admin':
-        print('here at events')
-        return render(request, 'manageEvents.html')
-    else:
-        return redirect('no_access')
     
 @login_required
 def manageMembers(request):
@@ -125,5 +120,21 @@ def manageMembers(request):
         return render(request, 'manageMembers.html', {
             "allMembers": allMembers,
             })
+    else:
+        return redirect('no_access')
+
+@login_required
+def manageEvents(request):
+    if request.user.membership == 'admin':
+        print('here at events')
+        return render(request, 'manageEvents.html')
+    else:
+        return redirect('no_access')
+    
+@login_required
+def addEvents(request):
+    if request.user.membership == 'admin':
+        print('here at events')
+        return render(request, 'addEvents.html')
     else:
         return redirect('no_access')

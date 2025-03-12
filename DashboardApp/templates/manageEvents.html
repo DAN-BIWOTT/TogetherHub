@@ -1,8 +1,188 @@
 {% extends "components/DashboardLayout.html" %}
 {% load static %}
-        <h2>{% block title %}Manage Events{% endblock %}
-        </h2>
-        {% block content %}
-     
-        {% endblock %}
-      
+
+<h2>{% block title %}🎉 Manage Events 🎊{% endblock %}</h2>
+{% block content %}
+
+    <style>
+         @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;700&display=swap');
+
+         .event-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+         .event-card {
+            position: relative;
+            width: 350px;
+            height: 500px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .event-card:hover {
+            transform: scale(1.05);
+        }
+
+        .event-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .event-card .content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .event-card h5 {
+            font-family: 'Pacifico', cursive;
+            font-size: 22px;
+        }
+
+        .event-card p {
+            font-size: 16px;
+            font-weight: 400;
+            color: #ffffff;
+        }
+
+        .event-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .event-badge.active {
+            background-color: green;
+        }
+
+        .event-badge.inactive {
+            background-color: red;
+        }
+
+        .event-actions button, .event-actions a {
+            margin: 5px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .event-actions button:hover, .event-actions a:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff7eb3, #ff758c);
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 25px;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            z-index: 1000;
+        }
+
+        .popup.show {
+            display: block;
+        }
+
+        .popup h3 {
+            font-family: 'Pacifico', cursive;
+        }
+
+        .popup-close {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+    </style>
+
+    <div class="row text-center">
+
+        <div class="mb-3">
+            <a href="{% url 'addEvents' %}" class="btn btn-primary">🎈 + Add Event 🎈</a>
+        </div>
+
+        <div class="event-container">
+                <div class="event-card" style="background-image: url('https://plus.unsplash.com/premium_photo-1722111091429-dd3dc55979d3?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');" onclick="openPopup('Sample Event')">
+                    <div class="event-badge active"></div>
+                    <div class="content">
+                        <h5>🎶 Sample Event</h5>
+                        <p>April 10, 2025 | New York</p>
+                    </div>
+                </div>
+    
+                <div class="event-card" style="background-image: url('https://images.unsplash.com/photo-1728044849321-4cbffc50cc1d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');" onclick="openPopup('Another Event')">
+                    <div class="event-badge inactive"></div>
+                    <div class="content">
+                        <h5>🎭 Another Event</h5>
+                        <p>May 20, 2025 | London</p>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="eventPopup" class="popup">
+        <h3 id="popupTitle"></h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vehicula ligula at magna laoreet, nec fringilla tortor fermentum.</p>
+        <button class="popup-close" onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+        function openPopup(title) {
+            document.getElementById('popupTitle').innerText = title;
+            document.getElementById('eventPopup').classList.add('show');
+        }
+        
+        function closePopup() {
+            document.getElementById('eventPopup').classList.remove('show');
+        }
+    </script>
+
+</body>
+</html>
+
+{% endblock %}

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,11 +30,24 @@
             padding: 20px;
             border: none;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+        .card-bg {
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            padding: 60px 20px;
+            position: relative;
+        }
+        .card-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
@@ -68,21 +82,27 @@
         <h2 class="section-title">How it Works</h2>
         <div class="row">
             <div class="col-md-4">
-                <div class="card">
-                    <strong>Join the Community</strong>
-                    <p>Sign up & express your interests.</p>
+                <div class="card card-bg" style="background-image: url('{% static 'images/engage.jpg' %}')">
+                    <div class="card-overlay">
+                        <strong>Join the Community</strong>
+                        <p>Sign up & express your interests.</p>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card">
-                    <strong>Engage & Participate</strong>
-                    <p>Attend events, book digital modules.</p>
+                <div class="card card-bg" style="background-image: url('{% static 'images/connect.jpg' %}')">
+                    <div class="card-overlay">
+                        <strong>Engage & Participate</strong>
+                        <p>Attend events, book digital modules.</p>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card">
-                    <strong>Grow & Connect</strong>
-                    <p>Track benefits & connect with members.</p>
+                <div class="card card-bg" style="background-image: url('{% static 'images/community.jpg' %}')">
+                    <div class="card-overlay">
+                        <strong>Grow & Connect</strong>
+                        <p>Track benefits & connect with members.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,59 +113,63 @@
         <h2 class="section-title">Membership Benefits</h2>
         <div class="row">
             <div class="col-md-3">
-                <div class="card">
-                    <strong>Event Access</strong>
-                    <p>Workshops, discussions, and more.</p>
+                <div class="card card-bg" style="background-image: url('{% static 'images/community connect.jpg' %}')">
+                    <div class="card-overlay">
+                        <strong>Event Access</strong>
+                        <p>Workshops, discussions, and more.</p>
+                    </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card">
-                    <strong>Creative Workspace</strong>
-                    <p>Access co-working spaces.</p>
+                <div class="card card-bg" style="background-image: url('{% static 'images/workspace.jpg' %}')">
+                    <div class="card-overlay">
+                        <strong>Creative Workspace</strong>
+                        <p>Access co-working spaces.</p>
+                    </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card">
-                    <strong>Skill Development</strong>
-                    <p>Structured content modules.</p>
+                <div class="card card-bg" style="background-image: url('{% static 'images/skills.jpg' %}')">
+                    <div class="card-overlay">
+                        <strong>Skill Development</strong>
+                        <p>Structured content modules.</p>
+                    </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card">
-                    <strong>Community Connections</strong>
-                    <p>Network with creatives.</p>
+                <div class="card card-bg" style="background-image: url('{% static 'images/community.jpg' %}')">
+                    <div class="card-overlay">
+                        <strong>Community Connections</strong>
+                        <p>Network with creatives.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Upcoming Events -->
-    <section class="container my-5 text-center">
-        <h2 class="section-title">Upcoming Events</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">Upcoming Event 1</div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">Upcoming Event 2</div>
-            </div>
+ <!-- Upcoming Events -->
+ <section class="container my-5 text-center">
+    <h2 class="section-title">Upcoming Events</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">Upcoming Event 1</div>
         </div>
-    </section>
+        <div class="col-md-6">
+            <div class="card">Upcoming Event 2</div>
+        </div>
+    </div>
+</section>
 
-    <!-- Newsletter Signup -->
-    <section class="container my-5 text-center">
-        <h2 class="section-title">Sign up for our Newsletter</h2>
-        <form class="d-flex justify-content-center">
-            <input type="email" class="form-control w-50" placeholder="Enter your email address">
-            <button class="btn btn-dark ms-2">Subscribe</button>
-        </form>
-    </section>
-
+<!-- Newsletter Signup -->
+<section class="container my-5 text-center">
+    <h2 class="section-title">Sign up for our Newsletter</h2>
+    <form class="d-flex justify-content-center">
+        <input type="email" class="form-control w-50" placeholder="Enter your email address">
+        <button class="btn btn-dark ms-2">Subscribe</button>
+    </form>
+</section>
     <!-- Footer -->
     <footer class="bg-dark text-light text-center py-4">
         <p>&copy; 2025 TogetherHub. All rights reserved.</p>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
