@@ -1,0 +1,87 @@
+{% extends "components/DashboardLayout.html" %}
+{% load static %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="notifications-container">
+    <div class="tabs">
+        <span class="active-tab">Notifications</span>
+        <span>Most Recent</span>
+    </div>
+    <div class="notification-list">
+        {% for notification in notifications %}
+        <div class="notification-item">
+            <div >
+                <img class="avatar" src="{% static 'images/avatar1.jpg' %}" alt="">
+            </div>
+            <div class="notification-text">
+                <strong>{{notification.sender}}</strong> {{notification.message}}
+                <span class="time">5 days ago</span>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+<style>
+.notifications-container {
+    max-width: 100%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.tabs {
+    display: flex;
+    gap: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.active-tab {
+    font-weight: bold;
+    border-bottom: 2px solid black;
+}
+
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: gray;
+    border-radius: 50%;
+}
+
+.notification-text {
+    flex-grow: 1;
+}
+
+.time {
+    display: block;
+    color: gray;
+    font-size: 12px;
+}
+</style>
+{% endblock %}

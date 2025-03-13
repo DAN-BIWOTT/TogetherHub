@@ -64,6 +64,17 @@ def manage_users(request):
         return redirect('no_access')  # Redirect users without access@login_required
 
 @login_required
+def adminNotifications(request):
+    dummy_notifications = [
+        {"sender": "Brian Griffin", "message": "wants to collaborate", "timestamp": "5 days ago"},
+        {"sender": "Adam (Mayor's Office)", "message": "is looking for people like you.", "timestamp": "1 month ago"},
+        {"sender": "Neil", "message": "is looking for people like you.", "timestamp": "1 month ago"},
+        {"sender": "Quagmire (Giggity Co.)", "message": "is looking for people like you.", "timestamp": "1 month ago"},
+        {"sender": "Herbert (Children's Program)", "message": "is looking for people like you.", "timestamp": "2 months ago"},
+    ]
+    return render(request, 'adminNotifications.html', {'notifications': dummy_notifications})
+
+@login_required
 def change_approval_state(request):
         if request.method == "POST":
                 try:

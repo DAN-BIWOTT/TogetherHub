@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import dashboard, profile, manage_users, adminHome, manageEvents, manageMembers, change_approval_state,addEvents
+from .views import dashboard, profile, manage_users, adminHome, manageEvents,manageMembers, adminNotifications, change_approval_state,addEvents
 
 urlpatterns = [
     path('', dashboard, name='dashboard'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('manageEvents/', manageEvents, name='manageEvents'),
     path('addEvents/', addEvents, name='addEvents'),
     path('manageMembers/', manageMembers, name='manageMembers'),
+    path('adminNotifications/', adminNotifications, name='adminNotifications'),
     ]
