@@ -22,14 +22,9 @@ class CustomUser(AbstractUser):
 ('Art', 'Art'),
 ('Science', 'Science'),
 ('Law', 'Law'),
-('Politics', 'Politics'),
 ('Environment', 'Environment'),
 ('Social Media', 'Social Media'),
-('Travel', 'Travel'),
-('Lifestyle', 'Lifestyle'),
-('Real Estate', 'Real Estate'),
-('Retail', 'Retail'),
-('Music', 'Music')
+('Other', 'Other')
                 ]
     
     phonenumber = models.CharField(max_length=15, blank=True, null=True)
