@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -56,11 +56,10 @@
 
         /* Search Bar Section */
         .search-container {
-            position: absolute;
-            top: 10px;
-            right: 10px;
             display: flex;
+            justify-content: flex-end;
             gap: 5px;
+            margin-bottom: 10px;
         }
 
         .search-container input {
@@ -80,7 +79,6 @@
         .events-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            /* Show only 2 events per row initially */
             gap: 15px;
         }
 
@@ -116,7 +114,7 @@
             text-align: center;
             padding: 10px;
             background: #060606;
-            color: rgb(250, 249, 249);
+            color: white;
             text-decoration: none;
             border-radius: 5px;
             margin: 20px auto;
@@ -168,16 +166,15 @@
             <div class="events-section">
                 <h1>Popular Events</h1>
 
-                <!-- Search Bar on Top Right -->
+                <!-- Search Bar -->
                 <div class="search-container">
-                    <input type="text" id="searchBar" placeholder="Search events...">
+                    <input type="text" id="searchBar" placeholder="Search events..." onkeyup="searchEvents()">
                     <button onclick="searchEvents()">Go</button>
                 </div>
 
-                <!-- Event Cards (Initially showing 2 events) -->
+                <!-- Event Cards -->
                 <div class="events-container" id="eventsContainer">
                     <div class="events-grid" id="eventsGrid">
-                        <!-- Event Cards will be inserted here dynamically -->
                         <div class="event-card">
                             <img src="https://via.placeholder.com/280x150" alt="Event Image">
                             <div class="event-title">Event 1 - Title</div>
@@ -216,52 +213,44 @@
     </div>
 
     <script>
-        // Function to toggle events visibility and add scrolling effect
+        let eventCount = 2; // Initially, 2 events are shown
+
         function toggleEvents() {
-            var eventsContainer = document.getElementById('eventsContainer');
             var eventsGrid = document.getElementById('eventsGrid');
             var seeMoreButton = document.getElementById('seeMoreButton');
 
-            // Check if there are more events to reveal
-            var moreEvents = document.querySelectorAll('.event-card').length;
-
-            // Append more events (you can replace this logic with dynamic loading or fetching)
-            if (moreEvents <= 2) {
-                for (var i = 0; i < 3; i++) {
-                    eventsGrid.innerHTML += `<div class="event-card">
-                        <img src="https://via.placeholder.com/280x150" alt="Event Image">
-                        <div class="event-title">Event ${i + 3} - Title</div>
-                        <div>📍 Venue | 🕒 00:00 AM - 00:00 PM | 💰 INR 499 | ⭐ 10 Interested</div>
-                    </div>`;
+            // Append more events (only if less than 5 are present)
+            if (eventCount < 5) {
+                for (var i = eventCount + 1; i <= 5; i++) {
+                    eventsGrid.innerHTML += `
+                        <div class="event-card">
+                            <img src="https://via.placeholder.com/280x150" alt="Event Image">
+                            <div class="event-title">Event ${i} - Title</div>
+                            <div>📍 Venue | 🕒 00:00 AM - 00:00 PM | 💰 INR 499 | ⭐ 10 Interested</div>
+                        </div>`;
                 }
+                eventCount = 5; // Update event count
             }
 
-            // Enable scroll effect for remaining events
-            eventsContainer.style.maxHeight = '300px';
-            eventsContainer.style.overflowY = 'auto';
-
             // Disable "See More" button after all events are loaded
-            seeMoreButton.disabled = true;
-            seeMoreButton.style.backgroundColor = '#ccc';
-            seeMoreButton.style.cursor = 'not-allowed';
+            if (eventCount >= 5) {
+                seeMoreButton.disabled = true;
+                seeMoreButton.style.backgroundColor = '#ccc';
+                seeMoreButton.style.cursor = 'not-allowed';
+            }
         }
 
-        // Function to handle search
         function searchEvents() {
             var searchQuery = document.getElementById("searchBar").value.toLowerCase();
             var eventCards = document.querySelectorAll('.event-card');
 
             eventCards.forEach(function (card) {
                 var title = card.querySelector('.event-title').textContent.toLowerCase();
-                if (title.includes(searchQuery)) {
-                    card.style.display = 'block';  // Show matching events
-                } else {
-                    card.style.display = 'none';  // Hide non-matching events
-                }
+                card.style.display = (searchQuery === "" || title.includes(searchQuery)) ? 'block' : 'none';
             });
         }
     </script>
 
 </body>
 
-</html> -->
+</html>

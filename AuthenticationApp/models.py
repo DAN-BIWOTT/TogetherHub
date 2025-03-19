@@ -37,11 +37,6 @@ class CustomUser(AbstractUser):
 
             self.username = unique_username
 
-        if self.membership == 'Workspace':
-            self.is_staff = True
-        else:
-            self.is_staff = False
-
 
         super().save(*args, **kwargs)
         
