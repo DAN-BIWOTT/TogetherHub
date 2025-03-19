@@ -6,6 +6,11 @@ from django.contrib.auth import login
 from .models import CustomUser
 from django.contrib.auth.decorators import login_required
 import sys
+from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+from .forms import CustomPasswordResetForm
+
+User = get_user_model()
 
 def sign_in(request):
     if request.method == 'POST':
@@ -29,6 +34,42 @@ def sign_in(request):
         print(message)
 
     return render(request, "sign_in.html")
+
+def password_reset_view(request):
+    if request.method == "POST":
+        form = CustomPasswordResetForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['user']  # Get the validated user
+            request.session['reset_user_id'] = user.id  # Store user ID in session
+            return redirect('set_new_password')  # Redirect to password reset page
+    else:
+        form = CustomPasswordResetForm()
+
+    return render(request, 'password_reset.html', {'form': form})
+
+
+def set_new_password_view(request):
+    user_id = request.session.get('reset_user_id')  # Retrieve user from session
+    if not user_id:
+        messages.error(request, "Session expired or invalid request.")
+        return redirect('password_reset')
+
+    user = User.objects.get(id=user_id)
+
+    if request.method == "POST":
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if new_password and confirm_password and new_password == confirm_password:
+            user.password = make_password(new_password)  # Hash and set new password
+            user.save()
+            del request.session['reset_user_id']  # Clear session data
+            messages.success(request, "Password reset successfully. You can now log in.")
+            return redirect('sign_in')  # Redirect to login page
+        else:
+            messages.error(request, "Passwords do not match.")
+
+    return render(request, "set_new_password.html")
 
 def sign_up(request):
     if request.method == 'POST':
