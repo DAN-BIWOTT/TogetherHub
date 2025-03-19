@@ -22,4 +22,6 @@ urlpatterns = [
     path('', include("HomeApp.urls") ),
     path('auth/', include("AuthenticationApp.urls") ),
     path('dashboard/', include("DashboardApp.urls")), 
+    path('events/', include('events.urls')),
+    
 ]

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from .views import dashboard, profile, manage_users, adminHome, manageEvents,manageMembers, adminNotifications, change_approval_state,addEvents
 
 urlpatterns = [
