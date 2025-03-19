@@ -1,0 +1,62 @@
+{% extends "components/DashboardLayout.html" %}
+{% load static %}
+
+{% block title %}Create Event{% endblock %}
+
+{% block content %}
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <div class="container mt-5">
+        <div class="form-container">
+            <h2 class="text-center">Create Event</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="id_name" class="form-label">Event Name</label>
+                    <input type="text" name="name" id="id_name" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">Description</label>
+                    <textarea name="description" id="id_description" class="form-control" rows="4" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="id_start_date" class="form-label">Start Date & Time</label>
+                    <input type="datetime-local" name="start_date" id="id_start_date" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="id_end_date" class="form-label">End Date & Time</label>
+                    <input type="datetime-local" name="end_date" id="id_end_date" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="id_location" class="form-label">Location</label>
+                    <input type="text" name="location" id="id_location" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="id_organizer" class="form-label">Organizer</label>
+                    <select name="organizer" id="id_organizer" class="form-control">
+                        {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100">Create Event</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

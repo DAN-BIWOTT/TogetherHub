@@ -117,9 +117,9 @@
             <div class="mb-3">
                 <select class="form-control" name="membership" required>
                     <option value="" {% if membership == "" %}selected disabled {% endif %}>Select membership</option>
-                    <option value="Basic" {% if membership == "Basic" %}selected{% endif %}>Basic</option>
-                    <option value="Premium" {% if membership == "Premium" %}selected{% endif %}>Premium</option>
-                    <option value="Enterprise" {% if membership == "Enterprise" %}selected{% endif %}>Enterprise</option>
+                    <option value="Community" {% if membership == "Community" %}selected{% endif %}>Community</option>
+                    <option value="Key Access" {% if membership == "Key Access" %}selected{% endif %}>Key Access</option>
+                    <option value="Workspace" {% if membership == "Workspace" %}selected{% endif %}>Workspace</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -127,7 +127,19 @@
                     <option value="" {% if membership == "" %}selected disabled {% endif %}>Select interest</option>
                     <option value="Technology" {% if interest == "Technology" %}selected{% endif %}>Technology</option>
                     <option value="Design" {% if interest == "Design" %}selected{% endif %}>Design</option>
+                    <option value="Marketing" {% if interest == "Marketing" %}selected{% endif %}>Marketing</option>
+                    <option value="Finance" {% if interest == "Finance" %}selected{% endif %}>Finance</option>
+                    <option value="Education" {% if interest == "Education" %}selected{% endif %}>Education</option>
+                    <option value="Healthcare" {% if interest == "Healthcare" %}selected{% endif %}>Healthcare</option>
+                    <option value="Entertainment" {% if interest == "Entertainment" %}selected{% endif %}>Entertainment</option>
+                    <option value="Sports" {% if interest == "Sports" %}selected{% endif %}>Sports</option>
+                    <option value="Science" {% if interest == "Science" %}selected{% endif %}>Science</option>
+                    <option value="Law" {% if interest == "Law" %}selected{% endif %}>Law</option>
+                    <option value="Social Media" {% if interest == "Social Media" %}selected{% endif %}>Social Media</option>
+                    <option value="Environment" {% if interest == "Environment" %}selected{% endif %}>Environment</option>
+                    <option value="Art" {% if interest == "Art" %}selected{% endif %}>Art</option>
                     <option value="Business" {% if interest == "Business" %}selected{% endif %}>Business</option>
+                    <option value="Other" {% if interest == "Other" %}selected{% endif %}>Other</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary w-100">Sign Up</button>

@@ -1,11 +1,12 @@
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class CustomUser(AbstractUser):
     MEMBERSHIP_CHOICES = [
-       ('community', 'Community Member'),
-        ('key_access', 'Key Access Member'),
-        ('workspace', 'Creative Workspace Member'),
+       ('Community', 'Community Member'),
+        ('Key Access', 'Key Access Member'),
+        ('Workspace', 'Creative Workspace Member'),
     ]
 
     INTEREST_CHOICES = [
@@ -21,14 +22,9 @@ class CustomUser(AbstractUser):
 ('Art', 'Art'),
 ('Science', 'Science'),
 ('Law', 'Law'),
-('Politics', 'Politics'),
 ('Environment', 'Environment'),
 ('Social Media', 'Social Media'),
-('Travel', 'Travel'),
-('Lifestyle', 'Lifestyle'),
-('Real Estate', 'Real Estate'),
-('Retail', 'Retail'),
-('Music', 'Music')
+('Other', 'Other')
                 ]
     
     phonenumber = models.CharField(max_length=15, blank=True, null=True)
@@ -41,6 +37,7 @@ class CustomUser(AbstractUser):
     firstname = models.CharField(max_length=20, default='Guest')
     lastname = models.CharField(max_length=20, default="-")
     approvedmember = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now())
     
     email = models.EmailField(unique=True)
     
