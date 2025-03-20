@@ -115,8 +115,20 @@
                 <input type="password" class="form-control" name="verify_password" placeholder="Re-enter Password" required>
             </div>
             <div class="mb-3">
+                <select class="form-control" name="security_quetion" required>
+                    <option value="" {% if security_quetion == "" %}selected disabled {% endif %}>Select security quetion</option>
+                    <option value="What is your favorite food?" {% if security_quetion == "What is your favorite food?" %}selected{% endif %}>What is your favorite food?</option>
+                    <option value="What is your favorite place?" {% if security_quetion == "What is your favorite place?" %}selected{% endif %}>What is your favorite place?</option>
+                    <option value="What is your favorite place?" {% if security_quetion == "What is your favorite place?" %}selected{% endif %}>What is your favorite place?</option>
+                    <option value="What is your favorite place?" {% if security_quetion == "What is your favorite place?" %}selected{% endif %}>What is your favorite place?</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" name="security_answer" placeholder="security_answer" required>
+            </div>
+            <div class="mb-3">
                 <select class="form-control" name="membership" required>
-                    <option value="" {% if membership == "" %}selected disabled {% endif %}>Select membership</option>
+                    <option value="" {% if membership == "" %}selected disabled {% endif %}>membership</option>
                     <option value="Community" {% if membership == "Community" %}selected{% endif %}>Community</option>
                     <option value="Key Access" {% if membership == "Key Access" %}selected{% endif %}>Key Access</option>
                     <option value="Workspace" {% if membership == "Workspace" %}selected{% endif %}>Workspace</option>

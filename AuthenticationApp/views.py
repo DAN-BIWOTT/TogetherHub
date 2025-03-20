@@ -41,7 +41,14 @@ def password_reset_view(request):
         if form.is_valid():
             user = form.cleaned_data['user']  # Get the validated user
             request.session['reset_user_id'] = user.id  # Store user ID in session
-            return redirect('set_new_password')  # Redirect to password reset page
+            security_answer = form.cleaned_data['security_answer']
+            
+            # Check if the user has a security_answer and compare it with the form answer
+            if user.security_answer and user.security_answer.lower() == security_answer.lower():
+                return redirect('set_new_password')  # Redirect to password reset page
+            else:
+                form.add_error('security_answer', 'Incorrect security answer.')
+
     else:
         form = CustomPasswordResetForm()
 
@@ -80,6 +87,8 @@ def sign_up(request):
         verify_password = request.POST.get('verify_password')
         membership = request.POST.get('membership')
         interest = request.POST.get('interest')
+        security_question = request.POST.get('security_question')  # Get the selected security question
+        security_answer = request.POST.get('security_answer')  # Get the answer to the question
 
         if not membership:
             messages.error(request, "Please select a membership type.")
@@ -87,6 +96,8 @@ def sign_up(request):
                 "email": email,
                 "membership": membership,
                 "interest": interest,
+                "security_question": security_question,
+                "security_answer": security_answer,
             })
         
         if not verify_password:
@@ -95,6 +106,8 @@ def sign_up(request):
                 "email": email,
                 "membership": membership,
                 "interest": interest,
+                "security_question": security_question,
+                "security_answer": security_answer,
             })
         
         if verify_password != password:
@@ -103,6 +116,8 @@ def sign_up(request):
                 "email": email,
                 "membership": membership,
                 "interest": interest,
+                "security_question": security_question,
+                "security_answer": security_answer,
             })
         
         if not interest:
@@ -111,13 +126,25 @@ def sign_up(request):
                 "email": email,
                 "membership": membership,
                 "interest": interest,
+                "security_question": security_question,
+                "security_answer": security_answer,
             })
 
         if CustomUser.objects.filter(username=email).exists():
             messages.error(request, "Email is already registered")
         else:
-            # Create user with extra fields
-            user = CustomUser.objects.create_user(username=email, email=email, password=password, membership=membership, interest=interest, firstname=firstname, lastname=lastname)
+            # Create user with extra fields, including security question and answer
+            user = CustomUser.objects.create_user(
+                username=email,
+                email=email,
+                password=password,
+                membership=membership,
+                interest=interest,
+                firstname=firstname,
+                lastname=lastname,
+                security_question=security_question,  # Save the selected question
+                security_answer=security_answer,  # Save the answer
+            )
             user.save()
     
             # Auto-login after sign-up

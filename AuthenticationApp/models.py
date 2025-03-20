@@ -21,6 +21,8 @@ class CustomUser(AbstractUser):
     lastname = models.CharField(max_length=20, default="-")
     approvedmember = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now())
+    security_question = models.CharField(max_length=255, null=True, blank=True)
+    security_answer = models.CharField(max_length=255, null=True, blank=True)
     
     email = models.EmailField(unique=True)
     
