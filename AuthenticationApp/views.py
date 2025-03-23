@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 import sys
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-from .forms import CustomPasswordResetForm
 
 User = get_user_model()
 
@@ -37,22 +36,28 @@ def sign_in(request):
 
 def password_reset_view(request):
     if request.method == "POST":
-        form = CustomPasswordResetForm(request.POST)
-        if form.is_valid():
-            user = form.cleaned_data['user']  # Get the validated user
+        email = request.POST.get("email")
+        security_question = request.POST.get("security_question")
+        security_answer = request.POST.get("security_answer")
+
+        if not email or not security_question or not security_answer:
+            messages.error(request, "All fields are required.")
+            return render(request, "password_reset.html")
+
+        try:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            messages.error(request, "No user found with this email.")
+            return render(request, "password_reset.html")
+
+        # Check if security answer matches (case-insensitive)
+        if hasattr(user, 'security_answer') and user.security_answer.lower() == security_answer.lower():
             request.session['reset_user_id'] = user.id  # Store user ID in session
-            security_answer = form.cleaned_data['security_answer']
-            
-            # Check if the user has a security_answer and compare it with the form answer
-            if user.security_answer and user.security_answer.lower() == security_answer.lower():
-                return redirect('set_new_password')  # Redirect to password reset page
-            else:
-                form.add_error('security_answer', 'Incorrect security answer.')
+            return redirect('set_new_password')  # Redirect to reset password page
+        else:
+            messages.error(request, "Incorrect security answer.")
 
-    else:
-        form = CustomPasswordResetForm()
-
-    return render(request, 'password_reset.html', {'form': form})
+    return render(request, "password_reset.html")
 
 
 def set_new_password_view(request):
