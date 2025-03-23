@@ -38,7 +38,7 @@ class CustomUser(AbstractUser):
     skills = models.TextField(blank=True, null=True)
     birthdate = models.DateField(blank=True, null=True)
     membership = models.CharField(max_length=20, choices=MEMBERSHIP_CHOICES, default='community')
-    interest = models.CharField(max_length=255, blank=True, null=True)
+    interest = models.CharField(max_length=255, choices=INTEREST_CHOICES, default='Technology')
     firstname = models.CharField(max_length=20, default='Guest')
     lastname = models.CharField(max_length=20, default="-")
     approvedmember = models.BooleanField(default=False)
@@ -58,7 +58,6 @@ class CustomUser(AbstractUser):
                 counter += 1
 
             self.username = unique_username
-
 
         super().save(*args, **kwargs)
         

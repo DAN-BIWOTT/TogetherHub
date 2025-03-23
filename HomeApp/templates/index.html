@@ -6,46 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TogetherHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-   <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/67da898ab568d019092fbe7c/1immqihr4';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@300;400;600&family=Lora:wght@400;600&display=swap');
-        
         body {
             font-family: 'Arial', sans-serif;
         }
-        
-
         .hero {
             text-align: center;
             padding: 80px 20px;
+            background-image: url('{% static "images/Frame 16.png" %}');
             background-size: cover;
             background-position: center;
             position: relative;
-            color: white; /* Makes text white */
-            font-family: 'Inter', sans-serif; /* Change to 'Poppins' or 'Lora' as needed */
         }
-
-        .hero h1, .hero h2 {
-            font-weight: 600; /* Makes headings stand out */
-        }
-
-        .hero p {
-            font-weight: 300; /* Makes paragraph text lighter and more elegant */
-            font-size: 18px;
-        }
-
+        
         .hero::before {
             content: "";
             position: absolute;
@@ -53,15 +26,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Dark overlay */
-            backdrop-filter: blur(2px); /* Slight blur */
+            background-color: rgba(0, 0, 0, 0.4); /* Darker overlay */
+            backdrop-filter: blur(5px); /* Blurring effect */
+            z-index: 1;
         }
-
+        
         .hero * {
             position: relative;
-            z-index: 1; /* Ensures text is above the overlay */
+            z-index: 2;
         }
-
+        
+        
         
         .btn-custom {
             background-color: #000;
@@ -118,9 +93,9 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero" style="background-image: url('{% static 'images/Frame 16.png' %}')">
-        <h1 class="fw-bold">Building a More Equitable & Creative Economy</h1>
-        <p class="lead">Join a membership community that fosters creativity, collaboration, and positive change.</p>
+    <section class="hero">
+        <h1 class="fw-bold text-light">Building a More Equitable & Creative Economy</h1>
+        <p class="lead text-light">Join a membership community that fosters creativity, collaboration, and positive change.</p>
         <a href="#" class="btn btn-dark btn-lg">Become a Member</a>
         <a href="#" class="btn btn-outline-light btn-lg ms-2">Learn More</a>
     </section>

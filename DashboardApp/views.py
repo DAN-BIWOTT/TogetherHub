@@ -119,3 +119,41 @@ def adminHome(request):
             })
     else:
         return redirect('no_access')  # Redirect users without access
+    
+    
+@login_required
+def manageMembers(request):
+    if request.user.membership == 'admin':
+
+        # We get all users from the db
+        allMembers = CustomUser.objects.order_by('created_at').exclude(Q(membership="admin") | Q(approvedmember=False)) # The Q is necessary. I don't know why but it is. 🤦‍♂️
+        
+        return render(request, 'manageMembers.html', {
+            "allMembers": allMembers,
+            })
+    else:
+        return redirect('no_access')
+
+@login_required
+def manageEvents(request):
+    if request.user.membership == 'admin':
+        print('here at events')
+        return render(request, 'manageEvents.html')
+    else:
+        return redirect('no_access')
+    
+@login_required
+def addEvents(request):
+    if request.user.membership == 'admin':
+        print('here at events')
+        return render(request, 'addEvents.html')
+    else:
+        return redirect('no_access')
+    
+@login_required
+def learning(request):
+    if request.user.membership == 'admin':
+        print('here at learning')
+        return render(request, 'learning.html')
+    else:
+        return redirect('no_access')

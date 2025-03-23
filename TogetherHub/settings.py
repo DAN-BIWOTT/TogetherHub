@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'AuthenticationApp',
     'HomeApp',
     'DashboardApp',
-    'events',
 ]
 
 MIDDLEWARE = [
