@@ -194,12 +194,8 @@
                 <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-calendar"></i> Events</a>
             {% endif %}
 
-            {% if request.user.membership != "admin" %}     
-            <a href="#"><i class="fa-solid fa-calendar-days"></i> Events </a>
-            <a href="{% url 'learning' %}"><i class="fa-solid fa-book"></i> Learning</a>
-            <a href="#"><i class="fa-solid fa-registered"></i> Membership</a>
-            <a href="#"><i class="fa-solid fa-network-wired"></i> Community Board </a>
-            <a href="#"><i class="fa-solid fa-message"></i> Messages</a>
+            {% if request.user.membership == "community" or request.user.membership == "key_access" %}     
+                <a href="#"><i class="fa-solid fa-calendar-days"></i> Both Com and Key</a>
             {% endif %}
 
             {% if request.user.membership == "key_access" %}
