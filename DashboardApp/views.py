@@ -1,3 +1,4 @@
+from .models import Event
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -6,6 +7,9 @@ from AuthenticationApp.models import CustomUser
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.shortcuts import render, redirect
+import os
+from django.conf import settings
 
 # MANAGE USERS 🥸
 @login_required
@@ -136,16 +140,105 @@ def manageMembers(request):
 
 @login_required
 def manageEvents(request):
-    if request.user.membership == 'admin':
-        print('here at events')
-        return render(request, 'manageEvents.html')
+    if request.user.membership == 'admin' or request.user.membership == 'Workspace':
+        allEvents = Event.objects.order_by('created_at')
+
+        return render(request, 'manageEvents.html', {
+            "allEvents":allEvents
+        })
     else:
         return redirect('no_access')
-    
+
+@login_required
+def create_event(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        start_date = request.POST.get("start_date")
+        end_date = request.POST.get("end_date")
+        location = request.POST.get("location")
+        organizer_id = request.POST.get("organizer")
+        poster = request.FILES.get("poster")  # File upload handling
+        
+        # Ensure the organizer exists
+        organizer = CustomUser.objects.get(id=organizer_id)
+
+        # Save poster manually
+        poster_path = None
+        if poster:
+            poster_directory = os.path.join(settings.MEDIA_ROOT, "event_posters")
+            os.makedirs(poster_directory, exist_ok=True)
+            poster_path = os.path.join("event_posters", poster.name)
+
+            with open(os.path.join(settings.MEDIA_ROOT, poster_path), "wb+") as destination:
+                for chunk in poster.chunks():
+                    destination.write(chunk)
+
+        event = Event.objects.create(
+            name=name,
+            description=description,
+            start_date=start_date,
+            end_date=end_date,
+            location=location,
+            organizer=organizer,
+            poster=poster_path,  # Store relative path
+        )
+
+        return redirect("manageEvents")  # Redirect to event list page
+
+    return render(request, "addEvents.html")
+
+@login_required
+def update_event(request, event_id):
+    """Edit an existing event."""
+    event = Event.objects.get(id=event_id)
+
+
+    if request.method == "POST":
+        event.name = request.POST.get("name")
+        event.description = request.POST.get("description")
+        event.start_date = request.POST.get("start_date")
+        event.end_date = request.POST.get("end_date")
+        event.location = request.POST.get("location")
+
+        if "poster" in request.FILES:
+            event.poster = request.FILES["poster"]
+
+        event.save()
+        return redirect("manageEvents")
+
+    return render(request, "editEvent.html", {"event": event})
+
+
+@login_required
+def delete_event(request, event_id):
+    """Delete an event."""
+    event = Event.objects.get(id=event_id)
+
+    if request.method == "POST":
+        event.delete()
+        return redirect("manageEvents")
+
+    return render(request, "deleteEvent.html", {"event": event})
+
 @login_required
 def addEvents(request):
-    if request.user.membership == 'admin':
+    if request.user.membership != 'admin':
         print('here at events')
         return render(request, 'addEvents.html')
     else:
         return redirect('no_access')
+    
+@login_required
+def learning(request):
+    if request.user.membership == 'admin':
+        print('here at learning')
+        return render(request, 'learning.html')
+    else:
+        print(request.user.membership)
+        return redirect('no_access')
+    
+
+def no_access(request):
+    print(request.user.membership)
+    return render(request, "no_access.html")

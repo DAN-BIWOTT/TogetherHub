@@ -1,0 +1,22 @@
+<form action="{% url 'update_event' event.id %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="name">Event Name:</label>
+    <input type="text" name="name" value="{{ event.name }}" required>
+    
+    <label for="description">Description:</label>
+    <textarea name="description" required>{{ event.description }}</textarea>
+
+    <label for="start_date">Start Date:</label>
+    <input type="date" name="start_date" value="{{ event.start_date|date:'Y-m-d' }}" required>
+
+    <label for="end_date">End Date:</label>
+    <input type="date" name="end_date" value="{{ event.end_date|date:'Y-m-d' }}" required>
+
+    <label for="location">Location:</label>
+    <input type="text" name="location" value="{{ event.location }}" required>
+
+    <label for="poster">Change Poster:</label>
+    <input type="file" name="poster" accept="image/*">
+    
+    <button type="submit">Update Event</button>
+</form>

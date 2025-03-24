@@ -13,8 +13,31 @@
         .hero {
             text-align: center;
             padding: 80px 20px;
-            background: #f8f9fa;
+            background-image: url('{% static "images/Frame 16.png" %}');
+            background-size: cover;
+            background-position: center;
+            position: relative;
         }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* Darker overlay */
+            backdrop-filter: blur(5px); /* Blurring effect */
+            z-index: 1;
+        }
+        
+        .hero * {
+            position: relative;
+            z-index: 2;
+        }
+        
+        
+        
         .btn-custom {
             background-color: #000;
             color: white;
@@ -71,10 +94,10 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1 class="fw-bold">Building a More Equitable & Creative Economy</h1>
-        <p class="lead">Join a membership community that fosters creativity, collaboration, and positive change.</p>
+        <h1 class="fw-bold text-light">Building a More Equitable & Creative Economy</h1>
+        <p class="lead text-light">Join a membership community that fosters creativity, collaboration, and positive change.</p>
         <a href="#" class="btn btn-dark btn-lg">Become a Member</a>
-        <a href="#" class="btn btn-outline-dark btn-lg ms-2">Learn More</a>
+        <a href="#" class="btn btn-outline-light btn-lg ms-2">Learn More</a>
     </section>
 
     <!-- How it Works -->
