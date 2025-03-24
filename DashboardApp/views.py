@@ -123,8 +123,7 @@ def adminHome(request):
             })
     else:
         return redirect('no_access')  # Redirect users without access
-    
-    
+        
 @login_required
 def manageMembers(request):
     if request.user.membership == 'admin':
@@ -138,6 +137,7 @@ def manageMembers(request):
     else:
         return redirect('no_access')
 
+# MANAGE WORKSPACE 🏢
 @login_required
 def manageEvents(request):
     if request.user.membership == 'admin' or request.user.membership == 'Workspace':
@@ -209,7 +209,6 @@ def update_event(request, event_id):
 
     return render(request, "editEvent.html", {"event": event})
 
-
 @login_required
 def delete_event(request, event_id):
     """Delete an event."""
@@ -228,17 +227,19 @@ def addEvents(request):
         return render(request, 'addEvents.html')
     else:
         return redirect('no_access')
-    
+
+# MANAGE KEY ACCESS 🏫
 @login_required
 def learning(request):
-    if request.user.membership == 'admin':
+    if request.user.membership == 'admin' or request.user.membership == 'Key Access':
         print('here at learning')
         return render(request, 'learning.html')
     else:
         print(request.user.membership)
         return redirect('no_access')
     
-
 def no_access(request):
     print(request.user.membership)
     return render(request, "no_access.html")
+
+# MANAGE COMMUNITY 🧑‍🤝‍🧑
