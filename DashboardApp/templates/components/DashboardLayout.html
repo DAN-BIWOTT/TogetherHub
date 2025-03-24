@@ -135,72 +135,69 @@
             font-size: 18px;
             color: gray;
         }
-        /* Profile */
-    body {
-        background-color: #f8f9fa;
-    }
-    .container {
-        max-width: 800px;
-        margin-top: 40px;
-    }
-    .profile-card {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-    }
-    .interest {
-        display: inline-block;
-        padding: 10px 15px;
-        margin: 5px;
-        border-radius: 20px;
-        background-color: #e9ecef;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .interest.selected {
-        background-color: #0d6efd;
-        color: white;
-    }
-    .search-box {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ced4da;
-        border-radius: 5px;
-        margin-bottom: 20px;
-    }
-</style>
     </style>
+   
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 40px;
+        }
+        .profile-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .interest {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            background-color: #e9ecef;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .interest.selected {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+
 </head>
 <body>  
     <div class="sidebar">
         <div class="sidebar-top">
             <h4>TogetherHub</h4>
+            {% comment %} Purely Admin links {% endcomment %}
             {% if request.user.membership == "admin" %}
                 <a href="{% url 'adminHome' %}"><i class="fa-solid fa-home"></i> Home</a>
                 <a href="{% url 'manageUsers' %}"><i class="fa-solid fa-user-plus"></i> Manage New Users</a>
                 <a href="{% url 'manageMembers' %}"><i class="fa-solid fa-users"></i> Members</a>
                 <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-calendar"></i> Events</a>
             {% endif %}
-
-            {% if request.user.membership != "admin" %}
-            <a href="#"><i class="fa-solid fa-book"></i> Learning</a>
-            <a href="#"><i class="fa-solid fa-registered"></i> Membership</a>
-            <a href="#"><i class="fa-solid fa-network-wired"></i> Community Board </a>
-            <a href="#"><i class="fa-solid fa-message"></i> Messages</a>
-            {% endif %}
-
+            
+            {% comment %} Purely Key Access Members: manage  {% endcomment %}
             {% if request.user.membership == "Key Access" %}
-                <!-- <a href="#"><i class="fa-solid fa-chart-bar"></i> Just Key Access</a> -->
+            <a href="{% url 'learning' %}"><i class="fa-solid fa-network-wired"></i> Community Lessons </a>
             {% endif %}
-
+            
+            {% comment %} Purely Workspace {% endcomment %}
             {% if request.user.membership == "Workspace" %}
-                <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-calendar"></i> Events</a>
-
+            <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-calendar"></i> Events</a>
             {% endif %}
-
+            
+            {% comment %} Purely Community Members {% endcomment %}
             {% if request.user.membership == "community" %}
+            <a href="#"><i class="fa-solid fa-book"></i> Learning</a>
+            <a href="#"><i class="fa-solid fa-book"></i> Events</a>
             {% endif %}
 
         </div>
