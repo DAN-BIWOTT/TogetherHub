@@ -184,20 +184,23 @@
                 <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-calendar"></i> Events</a>
             {% endif %}
 
-            {% if request.user.membership != "admin" %}     
-            <a href="#"><i class="fa-solid fa-calendar-days"></i> Events </a>
+            {% if request.user.membership != "admin" %}
             <a href="#"><i class="fa-solid fa-book"></i> Learning</a>
             <a href="#"><i class="fa-solid fa-registered"></i> Membership</a>
             <a href="#"><i class="fa-solid fa-network-wired"></i> Community Board </a>
             <a href="#"><i class="fa-solid fa-message"></i> Messages</a>
             {% endif %}
 
-            {% if request.user.membership == "key_access" %}
+            {% if request.user.membership == "Key Access" %}
                 <!-- <a href="#"><i class="fa-solid fa-chart-bar"></i> Just Key Access</a> -->
             {% endif %}
 
-            {% if request.user.membership == "workspace" %}
-                <a href="#"><i class="fa-solid fa-user"></i> Just Workspace</a>
+            {% if request.user.membership == "Workspace" %}
+                <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-calendar"></i> Events</a>
+
+            {% endif %}
+
+            {% if request.user.membership == "community" %}
             {% endif %}
 
         </div>

@@ -8,7 +8,7 @@ class Event(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     location = models.CharField(max_length=255)
-    # poster = models.CharField(max_length=255)
+    poster = models.ImageField(upload_to='event_posters/', default='event.jpg')  # Store images in media/event_posters/
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     organizer = models.ForeignKey(CustomUser, related_name="organized_events", on_delete=models.CASCADE)
