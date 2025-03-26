@@ -1,7 +1,12 @@
 {% extends "components/DashboardLayout.html" %}
 {% load static %}
-
-<h2>{% block title %}🎉 Manage Events 🎊{% endblock %}</h2>
+<h2>{% block title %}
+{%  if request.user.membership == 'admin' or request.user.membership == 'Workspace' %}
+    🎉 Manage Events 🎊{
+        {% else %}
+    🎉 Pick Events 🎊                
+        {% endif %}
+    {% endblock %}</h2>
 {% block content %}
 
     <style>
@@ -140,11 +145,11 @@
     </style>
 
     <div class="row text-center">
-
+        {%  if request.user.membership == 'admin' or request.user.membership == 'Workspace' %}
         <div class="mb-3">
             <a href="{% url 'addEvents' %}" class="btn btn-primary">🎈 + Add Event 🎈</a>
         </div>
-
+        {% endif %}
         <div class="event-container">
             {% for event in allEvents %}
             <div class="event-card" 

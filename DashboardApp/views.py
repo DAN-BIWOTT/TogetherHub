@@ -144,14 +144,12 @@ def manageMembers(request):
 # MANAGE WORKSPACE 🏢
 @login_required
 def manageEvents(request):
-    if request.user.membership == 'admin' or request.user.membership == 'Workspace':
-        allEvents = Event.objects.order_by('created_at')
+      allEvents = Event.objects.order_by('created_at')
 
-        return render(request, 'manageEvents.html', {
-            "allEvents":allEvents
-        })
-    else:
-        return redirect('no_access')
+      return render(request, 'manageEvents.html', {
+          "allEvents":allEvents
+       })
+
 
 @login_required
 def create_event(request):
