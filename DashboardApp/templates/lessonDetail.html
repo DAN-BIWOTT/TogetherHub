@@ -1,0 +1,53 @@
+{% extends "components/DashboardLayout.html" %}
+{% load static %}
+
+{% block title %}Lesson Details{% endblock %}
+
+{% block content %}
+<div class="lesson-detail-container">
+    <h2>{{ lesson.title }}</h2>
+    <p><strong>Description:</strong> {{ lesson.description }}</p>
+    <p><strong>Category:</strong> {{ lesson.category }}</p>
+    <p><strong>Difficulty Level:</strong> {{ lesson.difficulty }}</p>
+    <p><strong>Duration:</strong> {{ lesson.duration }} minutes</p>
+    <p><strong>Resources:</strong> 
+        {% if lesson.resources %}
+            <a href="{{ lesson.resources }}" target="_blank">View Resources</a>
+        {% else %}
+            No additional resources available.
+        {% endif %}
+    </p>
+    <p><strong>Content:</strong> {{ lesson.content|linebreaks }}</p>
+    <a href="{% url 'learning' %}" class="back-btn">Back to Lessons</a>
+</div>
+
+<style>
+    .lesson-detail-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .lesson-detail-container h2 {
+        margin-bottom: 20px;
+    }
+    .lesson-detail-container p {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+    .lesson-detail-container .back-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 15px;
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .lesson-detail-container .back-btn:hover {
+        background-color: #5a6268;
+    }
+</style>
+{% endblock %}

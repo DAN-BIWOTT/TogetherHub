@@ -1,8 +1,86 @@
 {% extends "components/DashboardLayout.html" %}
 {% load static %}
 
-<h2>{% block title %}Create Lessons{% endblock %}</h2>
+{% block title %}Lessons List{% endblock %}
+
 {% block content %}
+<div class="lesson-container">
+    <h2>Available Lessons</h2>
+    <a href="{% url 'createLesson' %}" class="add-btn">Add Lesson</a>
+    <table class="lesson-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Difficulty</th>
+                <th>Duration</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lesson in lessons %}
+            <tr>
+                <td>{{ lesson.title }}</td>
+                <td>{{ lesson.category }}</td>
+                <td>{{ lesson.difficulty }}</td>
+                <td>{{ lesson.duration }} mins</td>
+                <td>{{ lesson.description|truncatewords:20 }}</td>
+                <td>
+                    <a href="{% url 'lesson_detail' lesson.id %}" class="view-btn">View</a>
+                    <a href="{% url 'edit_lesson' lesson.id %}" class="edit-btn">Edit</a>
+                    <a href="{% url 'delete_lesson' lesson.id %}" class="delete-btn">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No lessons available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-
+<style>
+    .lesson-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .add-btn {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .lesson-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .lesson-table th, .lesson-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .lesson-table th {
+        background-color: #007bff;
+        color: white;
+    }
+    .view-btn, .edit-btn, .delete-btn {
+        padding: 5px 10px;
+        text-decoration: none;
+        border-radius: 5px;
+        color: white;
+    }
+    .view-btn { background-color: #28a745; }
+    .edit-btn { background-color: #ffc107; }
+    .delete-btn { background-color: #dc3545; }
+</style>
 {% endblock %}

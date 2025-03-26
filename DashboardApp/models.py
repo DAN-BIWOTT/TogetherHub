@@ -28,4 +28,16 @@ class Event(models.Model):
 
     def is_past(self):
         return self.end_date < timezone.now()
+    
+class Lesson(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    content = models.TextField(default="No content yet.")
+    category = models.CharField(max_length=100)
+    difficulty = models.CharField(max_length=50)
+    duration = models.IntegerField()
+    resources = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
 
