@@ -1,0 +1,101 @@
+{% extends "components/DashboardLayout.html" %}
+{% load static %}
+
+{% block title %}Create Lessons{% endblock %}
+
+{% block content %}
+<div class="lesson-container">
+    <h2>Create a New Lesson</h2>
+    <form method="POST" action="{% url 'createLesson' %}" class="lesson-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="lesson-title">Lesson Title</label>
+            <input type="text" id="lesson-title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="lesson-description">Description</label>
+            <textarea id="lesson-description" name="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="lesson-content">Lesson Content</label>
+            <textarea id="lesson-content" name="content" class="rich-text" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="lesson-category">Category</label>
+            <select id="lesson-category" name="category" required>
+                <option value="sharing">Sharing</option>
+                <option value="caring">Caring</option>
+                <option value="creating">Creating</option>
+                <option value="working">Working</option>
+                <option value="experiencing">Experiencing</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lesson-difficulty">Difficulty Level</label>
+            <select id="lesson-difficulty" name="difficulty" required>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lesson-duration">Duration (minutes)</label>
+            <input type="number" id="lesson-duration" name="duration" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="lesson-resources">Additional Resources (Links)</label>
+            <input type="url" id="lesson-resources" name="resources">
+        </div>
+        <button type="submit" class="submit-btn">Create Lesson</button>
+    </form>
+    
+    <a href="{% url 'learning' %}" class="back-btn">Back to Lessons</a>
+</div>
+
+<style>
+    .lesson-container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .lesson-form .form-group {
+        margin-bottom: 15px;
+    }
+    .lesson-form label {
+        display: block;
+        font-weight: bold;
+    }
+    .lesson-form input, .lesson-form textarea, .lesson-form select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .submit-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
+    .back-btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 15px;
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .back-btn:hover {
+        background-color: #5a6268;
+    }
+</style>
+{% endblock %}

@@ -1,7 +1,9 @@
 from .models import Event
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from .models import Lesson
+from .forms import LessonForm
 from django.contrib import messages
 from AuthenticationApp.models import CustomUser
 from django.http import JsonResponse
@@ -108,6 +110,7 @@ def adminHome(request):
     if request.user.membership == 'admin':
 
         allUsers = CustomUser.objects.order_by('created_at').exclude(membership="admin") # The - sign orders it in descending order.
+        allEvents = Event.objects.order_by('created_at').count()
         sampleUsers = allUsers[:5]
         community_member_count = allUsers.filter(membership="Community").count()
         key_access_count = allUsers.filter(membership="Key Access").count()
@@ -120,6 +123,7 @@ def adminHome(request):
             "key_access_count":key_access_count,
             "workspace_count":workspace_count,
             "new_users_count":new_users_count,
+            "all_events": allEvents
             })
     else:
         return redirect('no_access')  # Redirect users without access
@@ -231,13 +235,63 @@ def addEvents(request):
 # MANAGE KEY ACCESS 🏫
 @login_required
 def learning(request):
-    if request.user.membership == 'admin' or request.user.membership == 'Key Access':
-        print('here at learning')
-        return render(request, 'learning.html')
+    if request.user.membership in ['admin', 'Key Access']:
+        lessons = Lesson.objects.all()
+        print(lessons.count())
+        return render(request, 'learning.html', {'lessons': lessons})
     else:
-        print(request.user.membership)
         return redirect('no_access')
-    
+
+@login_required
+def createLesson(request):
+    if request.user.membership in ['admin', 'Key Access']:
+        if request.method == 'POST':
+            form = LessonForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('learning')
+        else:
+            form = LessonForm()
+            print("Form errors:", form.errors)
+        return render(request, 'createLesson.html', {'form': form})
+    else:
+        return redirect('no_access')
+
+@login_required
+def edit_lesson(request, lesson_id):
+    if request.user.membership in ['admin', 'Key Access']:
+        lesson = get_object_or_404(Lesson, id=lesson_id)
+        if request.method == 'POST':
+            form = LessonForm(request.POST, instance=lesson)
+            if form.is_valid():
+                form.save()
+                return redirect('learning')
+        else:
+            form = LessonForm(instance=lesson)
+        return render(request, 'editLesson.html', {'form': form})
+    else:
+        return redirect('no_access')
+
+@login_required
+def lesson_detail(request, lesson_id):
+    if request.user.membership in ['admin', 'Key Access']:
+        lesson = get_object_or_404(Lesson, id=lesson_id)
+        return render(request, 'lessonDetail.html', {'lesson': lesson})
+    else:
+        return redirect('no_access')
+
+@login_required
+def delete_lesson(request, lesson_id):
+    if request.user.membership in ['admin', 'Key Access']:
+        lesson = get_object_or_404(Lesson, id=lesson_id)
+        if request.method == 'POST':
+            lesson.delete()
+            return redirect('learning')
+        return render(request, 'learning.html', {'lesson': lesson})
+    else:
+        return redirect('no_access')
+
+
 def no_access(request):
     print(request.user.membership)
     return render(request, "no_access.html")
