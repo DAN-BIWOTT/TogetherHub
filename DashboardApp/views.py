@@ -234,8 +234,8 @@ def addEvents(request):
 
 # MANAGE KEY ACCESS 🏫
 @login_required
-def learning(request):
-    if request.user.membership in ['admin', 'Key Access']:
+def learning(request): # Add a check that results in only lessons made by the current user.
+    if request.user.membership in ['admin', 'Key Access', 'community']:
         lessons = Lesson.objects.all()
         print(lessons.count())
         return render(request, 'learning.html', {'lessons': lessons})
@@ -297,3 +297,8 @@ def no_access(request):
     return render(request, "no_access.html")
 
 # MANAGE COMMUNITY 🧑‍🤝‍🧑
+
+@login_required
+def allLessons(request):
+    lessons = Lesson.objects.all()
+    return render(request, 'allLessons.html', {'lessons': lessons})

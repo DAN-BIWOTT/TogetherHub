@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import create_event, createLesson, dashboard, delete_event, delete_lesson, edit_lesson, lesson_detail, profile, manage_users, adminHome, manageEvents,manageMembers, adminNotifications, change_approval_state,addEvents, learning, no_access, update_event
+from .views import allLessons, create_event, createLesson, dashboard, delete_event, delete_lesson, edit_lesson, lesson_detail, profile, manage_users, adminHome, manageEvents,manageMembers, adminNotifications, change_approval_state,addEvents, learning, no_access, update_event
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
@@ -18,6 +18,7 @@ urlpatterns = [
     path("no-access/", no_access, name="no_access"),
     path("create-event/", create_event, name="create_event"),
     path("createLesson/", createLesson, name="createLesson"),
+    path("allLessons/", allLessons, name="allLessons"),
     path('lesson/<int:lesson_id>/', lesson_detail, name='lesson_detail'),
     path('edit_lesson/<int:lesson_id>/', edit_lesson, name='edit_lesson'),
     path('delete_lesson/<int:lesson_id>/', delete_lesson, name='delete_lesson'),
