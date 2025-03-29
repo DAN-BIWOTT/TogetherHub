@@ -1,0 +1,87 @@
+{% extends "components/DashboardLayout.html" %}
+{% load static %}
+
+{% block title %}Registered Events{% endblock %}
+
+{% block content %}
+<style>
+.page-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.event-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.event-card {
+    background: #1e293b; /* Dark blue-gray */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+.event-card:hover {
+    transform: scale(1.05);
+}
+
+h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.description {
+    font-size: 14px;
+    color: #d1d5db; /* Light gray */
+}
+
+.date-location {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.unregister-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #ef4444; /* Red */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.unregister-btn:hover {
+    background-color: #dc2626; /* Darker red */
+}
+</style>
+
+<h2 class="page-title">Your Registered Events</h2>
+
+<div class="event-container">
+    {% for event in registered_events %}
+        <div class="event-card">
+            <h3>{{ event.name }}</h3>
+            <p class="description">{{ event.description }}</p>
+            <p class="date-location">📅 {{ event.start_date|date:"F j, Y, g:i A" }} - {{ event.end_date|date:"F j, Y, g:i A" }}</p>
+            <p class="date-location">📍 {{ event.location }}</p>
+            
+            <form action="{% url 'unregister_event' event.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="unregister-btn">Unregister</button>
+            </form>
+        </div>
+    {% empty %}
+        <p>You are not registered for any events yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

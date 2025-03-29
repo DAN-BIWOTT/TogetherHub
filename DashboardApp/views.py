@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Lesson
-from .forms import LessonForm
+from .forms import EventForm, LessonForm
 from django.contrib import messages
 from AuthenticationApp.models import CustomUser
 from django.http import JsonResponse
@@ -150,45 +150,19 @@ def manageEvents(request):
           "allEvents":allEvents
        })
 
-
 @login_required
 def create_event(request):
     if request.method == "POST":
-        name = request.POST.get("name")
-        description = request.POST.get("description")
-        start_date = request.POST.get("start_date")
-        end_date = request.POST.get("end_date")
-        location = request.POST.get("location")
-        organizer_id = request.POST.get("organizer")
-        poster = request.FILES.get("poster")  # File upload handling
-        
-        # Ensure the organizer exists
-        organizer = CustomUser.objects.get(id=organizer_id)
+        form = EventForm(request.POST, request.FILES)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.organizer = request.user
+            event.save()
+            return redirect('manageEvents')
+    else:
+        form = EventForm()
 
-        # Save poster manually
-        poster_path = None
-        if poster:
-            poster_directory = os.path.join(settings.MEDIA_ROOT, "event_posters")
-            os.makedirs(poster_directory, exist_ok=True)
-            poster_path = os.path.join("event_posters", poster.name)
-
-            with open(os.path.join(settings.MEDIA_ROOT, poster_path), "wb+") as destination:
-                for chunk in poster.chunks():
-                    destination.write(chunk)
-
-        event = Event.objects.create(
-            name=name,
-            description=description,
-            start_date=start_date,
-            end_date=end_date,
-            location=location,
-            organizer=organizer,
-            poster=poster_path,  # Store relative path
-        )
-
-        return redirect("manageEvents")  # Redirect to event list page
-
-    return render(request, "addEvents.html")
+    return render(request, 'createEvent.html', {'form': form})
 
 @login_required
 def update_event(request, event_id):
@@ -221,14 +195,6 @@ def delete_event(request, event_id):
         return redirect("manageEvents")
 
     return render(request, "deleteEvent.html", {"event": event})
-
-@login_required
-def addEvents(request):
-    if request.user.membership != 'admin':
-        print('here at events')
-        return render(request, 'addEvents.html')
-    else:
-        return redirect('no_access')
 
 # MANAGE KEY ACCESS 🏫
 @login_required
@@ -300,3 +266,68 @@ def no_access(request):
 def allLessons(request):
     lessons = Lesson.objects.all()
     return render(request, 'allLessons.html', {'lessons': lessons})
+
+@login_required
+def myLessons(request):
+    user = request.user  
+    enrolled_lessons = user.enrolled_lessons.all()
+    print("User:", user)
+    print("Enrolled Lessons:", enrolled_lessons)  # Debugging
+    return render(request, 'myLessons.html', {'enrolled_lessons': enrolled_lessons})
+
+@login_required
+def enroll_lesson(request, lesson_id):
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    user = request.user
+
+    if lesson.enrolled_users.filter(id=user.id).exists():
+        messages.info(request, "You're already enrolled in this course.")
+    else:
+        lesson.enrolled_users.add(user)
+        messages.success(request, f"Enrolled in {lesson.title}!")
+
+    return redirect("myLessons")
+
+
+@login_required
+def unenroll_lesson(request, lesson_id):
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    user = request.user
+
+    if lesson.enrolled_users.filter(id=user.id).exists():
+        lesson.enrolled_users.remove(user)  # Remove user from Many-to-Many field
+        messages.success(request, f"You have unenrolled from {lesson.title}.")
+    else:
+        messages.error(request, "You're not enrolled in this course.")
+
+    return redirect("myLessons")  # Redirect back to enrolled courses
+
+@login_required
+def my_events(request):
+    user = request.user  
+    registered_events = user.events_attended.all()
+    return render(request, 'myEvents.html', {'registered_events': registered_events})
+
+@login_required
+def register_event(request, event_id):
+    user = request.user  
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.method == "POST":
+        event.attendees.add(user)
+        messages.success(request, f"You have registered for {event.name}.")
+        return redirect("my_events")
+
+    return redirect("my_events")
+
+@login_required
+def unregister_event(request, event_id):
+    user = request.user  
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.method == "POST":
+        event.attendees.remove(user)  # Remove user from event
+        messages.success(request, f"You have unregistered from {event.name}.")
+        return redirect("my_events")  # Redirect back to the registered events page
+
+    return redirect("my_events")
