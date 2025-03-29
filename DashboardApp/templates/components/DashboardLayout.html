@@ -196,8 +196,10 @@
             
             {% comment %} Purely Community Members {% endcomment %}
             {% if request.user.membership == "community" %}
-            <a href="{% url 'learning' %}"><i class="fa-solid fa-book"></i> Learning</a>
-            <a href="#"><i class="fa-solid fa-book"></i> Events</a>
+            <a href="{% url 'allLessons' %}"><i class="fa-solid fa-book"></i> Learning Recommendations</a>
+            <a href="{% url 'myLessons' %}"><i class="fa-solid fa-book"></i>My Courses</a>
+            <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-book"></i> Event Recommendations</a>
+            <a href="{% url 'my_events' %}"><i class="fa-solid fa-book"></i> My Events</a>
             {% endif %}
 
         </div>

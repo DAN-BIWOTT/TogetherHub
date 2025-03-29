@@ -37,6 +37,8 @@ class Lesson(models.Model):
     difficulty = models.CharField(max_length=50)
     duration = models.IntegerField()
     resources = models.URLField(blank=True, null=True)
+    enrolled_users = models.ManyToManyField(CustomUser, related_name="enrolled_lessons", blank=True)
+
 
     def __str__(self):
         return self.title

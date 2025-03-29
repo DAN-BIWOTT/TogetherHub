@@ -1,0 +1,86 @@
+{% extends "components/DashboardLayout.html" %}
+{% load static %}
+
+{% block title %}Enrolled Courses{% endblock %}
+
+{% block content %}
+<style>
+.page-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.course-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.course-card {
+    background: #1e293b; /* Dark blue-gray */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+.course-card:hover {
+    transform: scale(1.05);
+}
+
+h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.description {
+    font-size: 14px;
+    color: #d1d5db; /* Light gray */
+}
+
+.difficulty, .duration {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.unenroll-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #ef4444; /* Red */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.unenroll-btn:hover {
+    background-color: #dc2626; /* Darker red */
+}
+</style>
+<h2 class="page-title">Your Enrolled Courses</h2>
+
+<div class="course-container">
+    {% for lesson in enrolled_lessons %}
+        <div class="course-card">
+            <h3>{{ lesson.title }}</h3>
+            <p class="description">{{ lesson.description }}</p>
+            <p class="difficulty">Difficulty: <strong>{{ lesson.difficulty }}</strong></p>
+            <p class="duration">Duration: <strong>{{ lesson.duration }} mins</strong></p>
+            
+            <form action="{% url 'unenroll_lesson' lesson.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="unenroll-btn">Unenroll</button>
+            </form>
+        </div>
+    {% empty %}
+        <p>You are not enrolled in any courses yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

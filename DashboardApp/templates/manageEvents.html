@@ -1,7 +1,12 @@
 {% extends "components/DashboardLayout.html" %}
 {% load static %}
-
-<h2>{% block title %}🎉 Manage Events 🎊{% endblock %}</h2>
+<h2>{% block title %}
+{%  if request.user.membership == 'admin' or request.user.membership == 'Workspace' %}
+    🎉 Manage Events 🎊
+        {% else %}
+    🎉 Pick Events 🎊                
+        {% endif %}
+    {% endblock %}</h2>
 {% block content %}
 
     <style>
@@ -140,11 +145,11 @@
     </style>
 
     <div class="row text-center">
-
+        {%  if request.user.membership == 'admin' or request.user.membership == 'Workspace' %}
         <div class="mb-3">
-            <a href="{% url 'addEvents' %}" class="btn btn-primary">🎈 + Add Event 🎈</a>
+            <a href="{% url 'create_event' %}" class="btn btn-primary">🎈 + Add Event 🎈</a>
         </div>
-
+        {% endif %}
         <div class="event-container">
             {% for event in allEvents %}
             <div class="event-card" 
@@ -171,38 +176,80 @@
         <p id="popupDate"></p>
         <p id="popupLocation"></p>
         <p id="popupDescription"></p>
-        <button class="popup-close" onclick="closePopup()">Close</button>
-        <a id="deleteEventLink" href="#" style="display: none;">Delete</a> <!-- Hide initially -->
-
+        
+        
+        <form id="registerForm" action="" method="post" style="display: none;">
+            {% csrf_token %}
+            <button 
+            type="submit" 
+            class="register-btn" 
+            {% if request.user.membership != "community" %}    
+                hidden="True"
+                {% endif %}
+                >Register</button>
+            </form>
+    
+            <p id="errorMessage" style="color: red; display: none;">⚠️ Error: Event ID missing</p>
+            <button class="popup-close" onclick="closePopup()">Close</button>
+            <a id="deleteEventLink" href="#"
+                {% if request.user.membership == "community" %}
+                hidden="True"
+                {% endif %}
+            >Delete</a>
     </div>
+    
+    
 
     <script>
         function openPopup(element) {
             const popup = document.getElementById('eventPopup');
-            const deleteLink = document.getElementById('deleteEventLink'); // Ensure this is correctly defined
-
+            const deleteLink = document.getElementById('deleteEventLink');
+            const registerForm = document.getElementById('registerForm');
+            const errorMessage = document.getElementById('errorMessage');
+        
             // Fetch data from the clicked event card
-            document.getElementById('popupTitle').innerText = element.getAttribute('data-name');
-            document.getElementById('popupDate').innerText = "📅 " + element.getAttribute('data-date');
-            document.getElementById('popupLocation').innerText = "📍 " + element.getAttribute('data-location');
-            document.getElementById('popupDescription').innerText = element.getAttribute('data-description');
-           
-            // Set the Delete link dynamically
-            const eventId = element.getAttribute('data-eventId');
+            const eventId = element.getAttribute('data-eventId'); // Get event ID from data-* attribute
+            const eventName = element.getAttribute('data-name');
+            const eventDate = element.getAttribute('data-date');
+            const eventLocation = element.getAttribute('data-location');
+            const eventDescription = element.getAttribute('data-description');
+        
+            // Populate the popup with event data
+            document.getElementById('popupTitle').innerText = eventName;
+            document.getElementById('popupDate').innerText = "📅 " + eventDate;
+            document.getElementById('popupLocation').innerText = "📍 " + eventLocation;
+            document.getElementById('popupDescription').innerText = eventDescription;
+        
+            // Check if event ID is available
             if (eventId) {
-                deleteLink.href = `/dashboard/delete-event/${eventId}/`;
-                deleteLink.style.display = 'inline-block'; // Show the link
+                // Construct the register event URL dynamically
+                registerForm.action = "/dashboard/register-event/" + eventId + "/"; // Dynamic URL
+        
+                // Show the registration form and hide the error message
+                registerForm.style.display = 'block';
+                errorMessage.style.display = 'none';
             } else {
-                deleteLink.style.display = 'none'; // Hide if no event ID
+                // Hide the registration form and show the error message if no event ID
+                registerForm.style.display = 'none';
+                errorMessage.style.display = 'block';
+            }
+                // Set the Delete event URL dynamically
+            if (eventId && deleteLink) {
+                deleteLink.href = "/dashboard/delete-event/" + eventId + "/"; // Dynamic URL for delete
+                deleteLink.style.display = 'inline-block'; // Show the delete link
+            } else {
+                deleteLink.style.display = 'none'; // Hide the delete link if event ID is missing
             }
 
-            // Show popup
+            // Show the popup
             popup.style.display = 'block';
         }
         
         function closePopup() {
             document.getElementById('eventPopup').style.display = 'none';
         }
+        
+        
         
     </script>
 
