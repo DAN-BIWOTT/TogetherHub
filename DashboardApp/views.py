@@ -12,11 +12,21 @@ import json
 from django.shortcuts import render, redirect
 import os
 from django.conf import settings
+from .recommendations import get_recommendations
 
 # MANAGE USERS 🥸
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    user = request.user  # Get the logged-in user
+    recommended_events, recommended_lessons = get_recommendations(user)
+    
+    context = {
+        'recommended_events': recommended_events,
+        'recommended_lessons': recommended_lessons,
+    }
+    
+    return render(request, 'dashboard.html', context)
+
 
 @login_required
 def profile(request):
@@ -144,7 +154,7 @@ def manageMembers(request):
 # MANAGE WORKSPACE 🏢
 @login_required
 def manageEvents(request):
-    if request.user.membership in ['admin']:
+    if request.user.membership in ['admin','community']:
           allEvents = Event.objects.order_by('-created_at')
     else:
       allEvents = Event.objects.filter(organizer=request.user).order_by('-created_at')
@@ -204,7 +214,6 @@ def delete_event(request, event_id):
 def learning(request): # Add a check that results in only lessons made by the current user.
     if request.user.membership in ['admin', 'Key Access', 'community']:
         lessons = Lesson.objects.all()
-        print(lessons.count())
         return render(request, 'learning.html', {'lessons': lessons})
     else:
         return redirect('no_access')

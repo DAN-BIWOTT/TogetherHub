@@ -39,7 +39,7 @@ class Command(BaseCommand):
             events.append(event)
 
         Event.objects.bulk_create(events)
-        self.stdout.write(self.style.SUCCESS("✅ Created 10 events!"))
+        self.stdout.write(self.style.SUCCESS("✅ Created 80 events!"))
 
         # Assign attendees randomly
         for event in Event.objects.all():
@@ -52,7 +52,7 @@ class Command(BaseCommand):
         categories = ["Technology", "Business", "Marketing", "Design", "Finance", "Education"]
 
         lessons = []
-        for _ in range(10):  # Fixed 10 lessons
+        for _ in range(80):  # Fixed 10 lessons
             lesson = Lesson(
                 title=fake.sentence(nb_words=5),
                 description=fake.paragraph(),
@@ -65,7 +65,7 @@ class Command(BaseCommand):
             lessons.append(lesson)
 
         Lesson.objects.bulk_create(lessons)
-        self.stdout.write(self.style.SUCCESS("✅ Created 10 lessons!"))
+        self.stdout.write(self.style.SUCCESS("✅ Created 80 lessons!"))
 
         # Enroll users in lessons randomly
         for lesson in Lesson.objects.all():

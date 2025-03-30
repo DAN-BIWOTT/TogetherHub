@@ -196,10 +196,11 @@
             
             {% comment %} Purely Community Members {% endcomment %}
             {% if request.user.membership == "community" %}
-            <a href="{% url 'allLessons' %}"><i class="fa-solid fa-book"></i> Learning Recommendations</a>
-            <a href="{% url 'myLessons' %}"><i class="fa-solid fa-book"></i>My Courses</a>
-            <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-book"></i> Event Recommendations</a>
-            <a href="{% url 'my_events' %}"><i class="fa-solid fa-book"></i> My Events</a>
+            <a href="{% url 'dashboard' %}"><i class="fa-solid fa-home"></i>Home</a>
+            <a href="{% url 'allLessons' %}"><i class="fa-solid fa-book"></i>All Lessons</a>
+            <a href="{% url 'myLessons' %}"><i class="fa-solid fa-book-reader"></i>My Courses</a>
+            <a href="{% url 'manageEvents' %}"><i class="fa-solid fa-calendar-days"></i>All Event</a>
+            <a href="{% url 'my_events' %}"><i class="fa-solid fa-calendar-xmark"></i> My Events</a>
             {% endif %}
 
         </div>

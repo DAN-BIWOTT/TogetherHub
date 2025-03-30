@@ -1,7 +1,162 @@
 {% extends "components/DashboardLayout.html" %}
 {% load static %}
-        <h2>{% block title %}User Dashboard{% endblock %}</h2>
-        {% block content %}
-     
-        {% endblock %}
-      
+
+<!-- Add any custom styles or include a CSS file for styling -->
+{% block title %}Recommendations{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+
+    <div class="recommendations-section">
+        <div class="recommended-events">
+            <h3 class="section-title">Events</h3>
+        
+            <div class="card-container row">
+                {% for event in recommended_events %}
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>{{ event.name }}</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="event-description">{{ event.description|truncatewords:20 }}</p>
+                            <form id="registerForm" action="" method="post" style="display: none;">
+                                {% csrf_token %}
+                                <button 
+                                type="submit" 
+                                class="register-btn"
+                                    {% if not request.user.approvedmember %}
+                                    disabled
+                                    {% endif %}
+                                    >Register</button>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                    <p>No event recommendations at the moment.</p>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div class="recommended-lessons">
+            <h3 class="section-title">Lessons</h3>
+            <div class="card-container row">
+                {% for lesson in recommended_lessons %}
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>{{ lesson.title }}</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="lesson-summary">{{ lesson.description|truncatewords:20 }}</p>
+                            <a href="
+                            {% if not request.user.approvedmember %}
+                                #
+                            {% else %}
+                            {% url 'enroll_lesson' lesson.id %}
+                            {% endif %}
+                             
+                            " class="btn btn-primary">Enroll</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                    <p>No lesson recommendations at the moment.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional: Include a section for empty state and call-to-action for more engagement -->
+{% endblock %}
+
+<!-- Add Custom CSS in the head or use an external stylesheet -->
+{% block custom_styles %}
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: 'Arial', sans-serif;
+    }
+    
+    .dashboard-title {
+        text-align: center;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+    }
+
+    .recommendations-section {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+    .section-title {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .card-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #2a9d8f;
+        color: white;
+        padding: 15px;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .event-description, .lesson-summary {
+        font-size: 1em;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        background-color: #2a9d8f;
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #1f7d67;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .card-container {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .card-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
