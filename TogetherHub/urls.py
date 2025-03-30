@@ -21,7 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("HomeApp.urls") ),
     path('auth/', include("AuthenticationApp.urls") ),
-    path('dashboard/', include("DashboardApp.urls")), 
-    path('events/', include('events.urls')),
-    
+    path('dashboard/', include("DashboardApp.urls")),     
 ]

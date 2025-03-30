@@ -136,12 +136,7 @@
                 </select>
             </div>
             <div class="mb-3">
-                   <select class="form-control" name="interest" required>
-                    <option value="" {% if membership == "" %}selected disabled {% endif %}>Select interest</option>
-                    <option value="Technology" {% if interest == "Technology" %}selected{% endif %}>Technology</option>
-                    <option value="Design" {% if interest == "Design" %}selected{% endif %}>Design</option>
-                    <option value="Business" {% if interest == "Business" %}selected{% endif %}>Business</option>
-                </select>
+                <input type="text" class="form-control" name="interest" placeholder="interest" required>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Sign Up</button>

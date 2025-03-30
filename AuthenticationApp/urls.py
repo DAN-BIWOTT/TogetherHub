@@ -10,6 +10,5 @@ urlpatterns = [
     path('sign_out/', sign_out, name='sign_out'),
     path('password_reset/', password_reset_view, name='password_reset'),  # ✅ Use the view function
     path('set_new_password/', set_new_password_view, name='set_new_password'),
-    path('sign_in/', sign_in, name='login')
 ]
 
