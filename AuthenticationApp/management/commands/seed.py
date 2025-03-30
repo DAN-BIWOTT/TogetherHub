@@ -1,32 +1,47 @@
-import random, datetime
+import random
+import datetime
 from django.core.management.base import BaseCommand
 from AuthenticationApp.models import CustomUser
 from django.utils.timezone import now
+from faker import Faker
+
+fake = Faker()
 
 class Command(BaseCommand):
-    help = "Seeds the database with an admin user"
+    help = "Seeds the database with fake users and an admin user"
 
     def handle(self, *args, **options):
-        
-        users = [ 
-            CustomUser(
-            username = f"user{i+1}_{random.randint(1, 100)}",
-            phonenumber=f"+44 709 124 123 1{i+1}",
-            location=f"CB{i}",
-            occupation="",
-            skills="",
-            birthdate=datetime.date(1990 + i, random.randint(1,12), random.randint(1,28)),
-            membership="Community",
-            interest="",
-            firstname=f"userf{i}",
-            lastname=f"userl{i}",
-            approvedmember=bool(random.getrandbits(1) ), #get random true or false values
-            created_at=datetime.date(2025, random.randint(1,12), random.randint(1,28)),
-            email=f"user{i}@gmail.com",
-            ) for i in range(10)
-         ]
-        CustomUser.objects.bulk_create(users)
+        MEMBERSHIP_CHOICES = [choice[0] for choice in CustomUser.MEMBERSHIP_CHOICES]
+        INTEREST_CHOICES = [choice[0] for choice in CustomUser.INTEREST_CHOICES]
 
+        users = []
+        for i in range(100):
+            birthdate = fake.date_of_birth(minimum_age=18, maximum_age=65)
+            first_name = fake.first_name()
+            last_name = fake.last_name()
+            email = f"user{i}_{random.randint(100, 999)}@gmail.com"
+            username = email.split("@")[0]
+
+            users.append(CustomUser(
+                username=username,
+                phonenumber=fake.phone_number(),
+                location=fake.city(),
+                occupation=fake.job(),
+                skills=", ".join(fake.words(nb=5)),
+                birthdate=birthdate,
+                membership=random.choice(MEMBERSHIP_CHOICES),
+                interest=random.choice(INTEREST_CHOICES),
+                firstname=first_name,
+                lastname=last_name,
+                approvedmember=random.choice([True, False]),
+                created_at=now(),
+                email=email,
+            ))
+
+        CustomUser.objects.bulk_create(users)
+        self.stdout.write(self.style.SUCCESS("✅ Successfully created 100 users!"))
+
+        # Ensure the admin user exists
         if not CustomUser.objects.filter(email="admin@gmail.com").exists():
             CustomUser.objects.create_superuser(
                 email="admin@gmail.com",

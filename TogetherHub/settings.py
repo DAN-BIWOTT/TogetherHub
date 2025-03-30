@@ -17,7 +17,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # URL for accessing media files
-MEDIA_URL = '/dashboard/media/'
+MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For production use

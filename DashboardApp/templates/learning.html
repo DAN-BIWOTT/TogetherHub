@@ -6,7 +6,13 @@
 {% block content %}
 <div class="lesson-container">
     <h2>Available Lessons</h2>
-    <a href="{% url 'createLesson' %}" class="add-btn">Add Lesson</a>
+    <a href="
+    {% if not request.user.approvedmember %}
+                #
+            {% else %}
+            {% url 'createLesson' %}
+            {% endif %}
+     " class="add-btn">Add Lesson</a>
     <table class="lesson-table">
         <thead>
             <tr>

@@ -62,7 +62,14 @@
             <p class="description">{{ lesson.description }}</p>
             <p class="difficulty">Difficulty: <strong>{{ lesson.difficulty }}</strong></p>
             <p class="duration">Duration: <strong>{{ lesson.duration }} mins</strong></p>
-            <a href="{% url 'enroll_lesson' lesson.id %}" class="signup-btn">Enroll</a>
+            <a href="
+            {% if not request.user.approvedmember %}
+                #
+            {% else %}
+            {% url 'enroll_lesson' lesson.id %}
+            {% endif %}
+             
+            " class="signup-btn">Enroll</a>
         </div>
     {% empty %}
         <p>No courses available at the moment.</p>
