@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.timezone import now
 
 class CustomUser(AbstractUser):
     MEMBERSHIP_CHOICES = [
@@ -42,7 +43,7 @@ class CustomUser(AbstractUser):
     firstname = models.CharField(max_length=20, default='Guest')
     lastname = models.CharField(max_length=20, default="-")
     approvedmember = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=now)
     
     email = models.EmailField(unique=True)
     

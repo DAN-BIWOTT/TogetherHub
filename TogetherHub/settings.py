@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'AuthenticationApp',
     'HomeApp',
     'DashboardApp',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
