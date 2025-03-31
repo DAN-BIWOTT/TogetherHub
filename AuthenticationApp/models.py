@@ -1,7 +1,6 @@
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.timezone import now
 
 class CustomUser(AbstractUser):
     MEMBERSHIP_CHOICES = [
@@ -10,28 +9,6 @@ class CustomUser(AbstractUser):
         ('Workspace', 'Creative Workspace Member'),
     ]
 
-    INTEREST_CHOICES = [
-('Technology', 'Technology'),
-('Design', 'Design'),
-('Business', 'Business'),
-('Marketing', 'Marketing'),
-('Finance', 'Finance'),
-('Education', 'Education'),
-('Healthcare', 'Healthcare'),
-('Entertainment', 'Entertainment'),
-('Sports', 'Sports'),
-('Art', 'Art'),
-('Science', 'Science'),
-('Law', 'Law'),
-('Politics', 'Politics'),
-('Environment', 'Environment'),
-('Social Media', 'Social Media'),
-('Travel', 'Travel'),
-('Lifestyle', 'Lifestyle'),
-('Real Estate', 'Real Estate'),
-('Retail', 'Retail'),
-('Music', 'Music')
-                ]
     
     phonenumber = models.CharField(max_length=15, blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
@@ -39,11 +16,13 @@ class CustomUser(AbstractUser):
     skills = models.TextField(blank=True, null=True)
     birthdate = models.DateField(blank=True, null=True)
     membership = models.CharField(max_length=20, choices=MEMBERSHIP_CHOICES, default='Community')
-    interest = models.CharField(max_length=255, choices=INTEREST_CHOICES, default='Technology')
+    interest = models.CharField(max_length=255, default='Technology')
     firstname = models.CharField(max_length=20, default='Guest')
     lastname = models.CharField(max_length=20, default="-")
     approvedmember = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=now)
+    created_at = models.DateTimeField(default=timezone.now())
+    security_question = models.CharField(max_length=255, blank=True, null=True)
+    security_answer = models.CharField(max_length=255, blank=True, null=True)
     
     email = models.EmailField(unique=True)
     
