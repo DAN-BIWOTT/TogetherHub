@@ -6,32 +6,49 @@
 <div class="row">
     <div class="overflow-x-auto">
         <table class="table mt-4 bg-white border rounded overflow-hidden" style="border-collapse: separate; border-spacing: 0;">
+            <div class="tag-filter">
+                <label for="tagFilter">Filter by Tags:</label>
+                <select id="tagFilter" class="form-select">
+                    <option value="">Select Tag...</option>
+                    {% for tag in allTags %}
+                        <option value="{{ tag }}">{{ tag }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
             <thead class="bg-light">
                 <tr class="table-active">
                     <th class="px-4 py-2 border-bottom">Avatar</th>
                     <th class="px-4 py-2 border-bottom">Member</th>
                     <th class="px-4 py-2 border-bottom">Status</th>
                     <th class="px-4 py-2 border-bottom">Membership</th>
-                    <th class="px-4 py-2 border-bottom">Activity</th>
+                    <th class="px-4 py-2 border-bottom">Tags</th>
                     <th class="px-4 py-2 border-bottom">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for user in allMembers %}
-                <tr class="border-bottom">
-                    <td class="px-4 py-2"><img src="{% static 'images/Avatar1.jpg' %}" alt="Avatar" class="w-8 h-8 rounded-full"></td>
+                <tr class="border-bottom" data-tags="{{ user.interests_list|join:',' }}">
+                    <td class="px-4 py-2">
+                        <img src="{% static 'images/Avatar1.jpg' %}" alt="Avatar" class="w-8 h-8 rounded-full">
+                    </td>
                     <td class="px-4 py-2"> 
-                    <a href="#">
-                        {{ user.firstname }} {{ user.lastname }}
-                    </a>
-                </td>
-                    <td class="px-4 py-2"><span class="badge bg-success-subtle text-success rounded-pill">Active</span></td>
+                        <a href="#">{{ user.firstname }} {{ user.lastname }}</a>
+                    </td>
+                    <td class="px-4 py-2">
+                        <span class="badge bg-success-subtle text-success rounded-pill">Active</span>
+                    </td>
                     <td class="px-4 py-2">{{ user.membership }}</td>
                     <td class="px-4 py-2">
-                        <div class="progress" style="height: 5px; width: 100px;">
-                            <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </td>
+                        {% if user.interests_list %}
+                            {% for interest in user.interests_list %}
+                                <span class="badge bg-secondary">{{ interest }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="badge bg-light">No tags</span>
+                        {% endif %}
+                    </td>                   
+                 
                     <td>
                         <button type="button" data-user-id="{{ user.id }}" data-status="False" class="btn btn-outline-danger ban-button"><i class="fa fa-ban"></i></button>
                         <button type="button" data-user-id="{{ user.id }}" data-status="True" class="btn btn-outline-success check-button"><i class="fa fa-check"></i></button>
@@ -39,6 +56,7 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            
         </table>
     </div>
     
@@ -71,6 +89,23 @@
         .split("; ")
         .find(row => row.startsWith("csrftoken="))
         ?.split("=")[1];
+}
+
+document.getElementById('tagFilter').addEventListener('change', function() {
+    let selectedTag = this.value;
+    filterMembersByTag(selectedTag);
+});
+
+function filterMembersByTag(tag) {
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        const tags = row.getAttribute('data-tags').split(',');
+        if (tag && !tags.includes(tag)) {
+            row.style.display = 'none';  // Hide members who don't have the selected tag
+        } else {
+            row.style.display = '';  // Show members who match the selected tag
+        }
+    });
 }
 
 </script>

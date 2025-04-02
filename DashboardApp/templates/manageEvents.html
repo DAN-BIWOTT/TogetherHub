@@ -1,12 +1,12 @@
 {% extends "components/DashboardLayout.html" %}
 {% load static %}
 <h2>{% block title %}
-{%  if request.user.membership == 'admin' or request.user.membership == 'Workspace' %}
+{% if request.user.membership == 'admin' or request.user.membership == 'Workspace' %}
     🎉 Manage Events 🎊
-        {% else %}
+{% else %}
     🎉 Pick Events 🎊                
-        {% endif %}
-    {% endblock %}</h2>
+{% endif %}
+{% endblock %}</h2>
 {% block content %}
 
     <style>
@@ -22,7 +22,7 @@
          .event-card {
             position: relative;
             width: 350px;
-            height: 500px;
+            height: 400px;
             background-size: cover;
             background-position: center;
             border-radius: 15px;
@@ -111,158 +111,51 @@
             background: linear-gradient(45deg, #ff9a9e, #fecfef);
         }
 
-        /* Popup Styles */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            z-index: 1000;
-        }
-
-        .popup.show {
-            display: block;
-        }
-
-        .popup h3 {
-            font-family: 'Pacifico', cursive;
-        }
-
-        .popup-close {
-            background: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
             border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
         }
-
     </style>
 
-    <div class="row text-center">
-        {%  if request.user.membership == 'admin' or request.user.membership == 'Workspace' %}
-        <div class="mb-3">
-            <a href="
-              {% if not request.user.approvedmember %}
-                #
-              {% else %}
-                {% url 'create_event' %}
-              {% endif %}
-             " class="btn btn-primary">🎈 + Add Event 🎈</a>
+<input type="text" id="searchInput" placeholder="Search events..." onkeyup="filterEvents()" class="search-box">
+
+<div class="event-container">
+    {% for event in allEvents %}
+    <div class="event-card" 
+         style="background-image: url('/dashboard{{ event.poster.url }}');" 
+         onclick="openPopup(this)"
+         data-name="{{ event.name }}"
+         data-eventId="{{ event.id }}"
+         data-date="{{ event.start_date }}"
+         data-location="{{ event.location }}"
+         data-description="{{ event.description }}">
+        <div class="event-badge active"></div>
+        <div class="content">
+            <h5 class="event-title">🎶 {{ event.name }}</h5>
+            <p>{{ event.start_date }} | {{ event.location }}</p>
         </div>
-        {% endif %}
-        <div class="event-container">
-            {% for event in allEvents %}
-            <div class="event-card" 
-                 style="background-image: url('/dashboard{{ event.poster.url }}');" 
-                 onclick="openPopup(this)"
-                 data-name="{{ event.name }}"
-                 data-eventId="{{ event.id }}"
-                 data-date="{{ event.start_date }}"
-                 data-location="{{ event.location }}"
-                 data-description="{{ event.description }}">
-                <div class="event-badge active"></div>
-                <div class="content">
-                    <h5>🎶 {{ event.name }}</h5>
-                    <p>{{ event.start_date }} | {{ event.location }}</p>
-                </div>
-            </div>
-            {% endfor %}
-            </div>
     </div>
+    {% endfor %}
+</div>
 
-    <!-- Popup Modal -->
-    <div id="eventPopup" class="popup">
-        <h3 id="popupTitle"></h3>
-        <p id="popupDate"></p>
-        <p id="popupLocation"></p>
-        <p id="popupDescription"></p>
+<script>
+    function filterEvents() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let eventCards = document.querySelectorAll('.event-card');
         
-        
-        <form id="registerForm" action="" method="post" style="display: none;">
-            {% csrf_token %}
-            <button 
-            type="submit" 
-            class="register-btn" 
-            {% if request.user.membership != "community" %}    
-                hidden="True"
-                {% endif %}
-                {% if not request.user.approvedmember %}
-                disabled
-                {% endif %}
-                >Register</button>
-            </form>
-    
-            <p id="errorMessage" style="color: red; display: none;">⚠️ Error: Event ID missing</p>
-            <button class="popup-close" onclick="closePopup()">Close</button>
-            <a id="deleteEventLink" href="#"
-                {% if request.user.membership == "community" %}
-                hidden="True"
-                {% endif %}
-            >Delete</a>
-    </div>
-    
-    
-
-    <script>
-        function openPopup(element) {
-            const popup = document.getElementById('eventPopup');
-            const deleteLink = document.getElementById('deleteEventLink');
-            const registerForm = document.getElementById('registerForm');
-            const errorMessage = document.getElementById('errorMessage');
-        
-            // Fetch data from the clicked event card
-            const eventId = element.getAttribute('data-eventId'); // Get event ID from data-* attribute
-            const eventName = element.getAttribute('data-name');
-            const eventDate = element.getAttribute('data-date');
-            const eventLocation = element.getAttribute('data-location');
-            const eventDescription = element.getAttribute('data-description');
-        
-            // Populate the popup with event data
-            document.getElementById('popupTitle').innerText = eventName;
-            document.getElementById('popupDate').innerText = "📅 " + eventDate;
-            document.getElementById('popupLocation').innerText = "📍 " + eventLocation;
-            document.getElementById('popupDescription').innerText = eventDescription;
-        
-            // Check if event ID is available
-            if (eventId) {
-                // Construct the register event URL dynamically
-                registerForm.action = "/dashboard/register-event/" + eventId + "/"; // Dynamic URL
-        
-                // Show the registration form and hide the error message
-                registerForm.style.display = 'block';
-                errorMessage.style.display = 'none';
+        eventCards.forEach(card => {
+            let eventName = card.getAttribute('data-name').toLowerCase();
+            if (eventName.includes(input)) {
+                card.style.display = "flex";
             } else {
-                // Hide the registration form and show the error message if no event ID
-                registerForm.style.display = 'none';
-                errorMessage.style.display = 'block';
+                card.style.display = "none";
             }
-                // Set the Delete event URL dynamically
-            if (eventId && deleteLink) {
-                deleteLink.href = "/dashboard/delete-event/" + eventId + "/"; // Dynamic URL for delete
-                deleteLink.style.display = 'inline-block'; // Show the delete link
-            } else {
-                deleteLink.style.display = 'none'; // Hide the delete link if event ID is missing
-            }
-
-            // Show the popup
-            popup.style.display = 'block';
-        }
-        
-        function closePopup() {
-            document.getElementById('eventPopup').style.display = 'none';
-        }
-        
-        
-        
-    </script>
-
-</body>
-</html>
+        });
+    }
+</script>
 
 {% endblock %}

@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render, redirect
-import os
+import ast
 from django.conf import settings
 from .recommendations import get_recommendations
 
@@ -144,12 +144,41 @@ def manageMembers(request):
 
         # We get all users from the db
         allMembers = CustomUser.objects.order_by('created_at').exclude(Q(membership="admin") | Q(approvedmember=False)) # The Q is necessary. I don't know why but it is. 🤦‍♂️
+        allTags = get_all_tags()
+        
+        for user in allMembers:
+            if user.interest:
+                user.interests_list = clean_user_interest(user.interest)
+        else:
+            user.interests_list = []
         
         return render(request, 'manageMembers.html', {
             "allMembers": allMembers,
+             "allTags": allTags
             })
     else:
         return redirect('no_access')
+
+def get_all_tags():
+    return CustomUser.objects.values_list('interest', flat=True).distinct()
+
+def clean_user_interest(raw_interests):
+    if not raw_interests:  # Handle None or empty cases
+        return []
+
+    try:
+        # Try parsing as a Python list
+        interests = ast.literal_eval(raw_interests)
+
+        if isinstance(interests, list):
+            # Remove extra whitespace & strip out weird characters
+            return sorted(set(i.strip().strip("'") for i in interests if i.strip() and i.strip() != "['']"))
+        else:
+            # If it's not a list, return it as a single-item list
+            return [raw_interests.strip()]
+    except (ValueError, SyntaxError):
+        # Fallback: Split by commas if the format is messed up
+        return sorted(set(i.strip().strip("'") for i in raw_interests.split(',') if i.strip()))
 
 # MANAGE WORKSPACE 🏢
 @login_required
