@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 import sys
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+import re
 
 User = get_user_model()
 
@@ -50,12 +51,16 @@ def password_reset_view(request):
             messages.error(request, "No user found with this email.")
             return render(request, "password_reset.html")
 
-        # Check if security answer matches (case-insensitive)
-        if hasattr(user, 'security_answer') and user.security_answer.lower() == security_answer.lower():
+        # Check if both security question and answer match (case-insensitive)
+        if (
+            hasattr(user, 'security_question') and hasattr(user, 'security_answer')
+            and user.security_question.lower() == security_question.lower()
+            and user.security_answer.lower() == security_answer.lower()
+        ):
             request.session['reset_user_id'] = user.id  # Store user ID in session
             return redirect('set_new_password')  # Redirect to reset password page
         else:
-            messages.error(request, "Incorrect security answer.")
+            messages.error(request, "Incorrect security question or answer.")
 
     return render(request, "password_reset.html")
 
@@ -92,8 +97,29 @@ def sign_up(request):
         verify_password = request.POST.get('verify_password')
         membership = request.POST.get('membership')
         interest = request.POST.get('interest')
-        security_question = request.POST.get('security_question')  # Get the selected security question
-        security_answer = request.POST.get('security_answer')  # Get the answer to the question
+        security_question = request.POST.get('security_question')
+        security_answer = request.POST.get('security_answer')
+
+        # Regex to check if the name contains numbers
+        if not firstname or not lastname:
+            messages.error(request, "First and Last name cannot be empty.")
+            return render(request, "sign_up.html", {
+                "email": email,
+                "membership": membership,
+                "interest": interest,
+                "security_question": security_question,
+                "security_answer": security_answer,
+            })
+
+        if re.search(r'\d', firstname) or re.search(r'\d', lastname):
+            messages.error(request, "First and Last name cannot contain numbers.")
+            return render(request, "sign_up.html", {
+                "email": email,
+                "membership": membership,
+                "interest": interest,
+                "security_question": security_question,
+                "security_answer": security_answer,
+            })
 
         if not membership:
             messages.error(request, "Please select a membership type.")
@@ -159,6 +185,7 @@ def sign_up(request):
             return redirect('dashboard')  # Redirecting to homepage
 
     return render(request, "sign_up.html")
+
 
 
 def sign_out(request):

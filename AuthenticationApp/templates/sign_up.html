@@ -115,12 +115,12 @@
                 <input type="password" class="form-control" name="verify_password" placeholder="Re-enter Password" required>
             </div>
             <div class="mb-3">
-                <select class="form-control" name="security_quetion" required>
-                    <option value="" {% if security_quetion == "" %}selected disabled {% endif %}>Select security quetion</option>
-                    <option value="What is your favorite food?" {% if security_quetion == "What is your favorite food?" %}selected{% endif %}>What is your favorite food?</option>
-                    <option value="What is your favorite place?" {% if security_quetion == "What is your favorite place?" %}selected{% endif %}>What is your favorite place?</option>
-                    <option value="What is your favorite hero?" {% if security_quetion == "What is your favorite hero?" %}selected{% endif %}>What is your favorite hero?</option>
-                    <option value="What is your favorite colour?" {% if security_quetion == "What is your favorite colour?" %}selected{% endif %}>What is your favorite colour?</option>
+                <select class="form-control" name="security_question" required>
+                    <option value="" {% if security_question == "" %}selected disabled {% endif %}>Select security question</option>
+                    <option value="What is your favorite food?" {% if security_question == "What is your favorite food?" %}selected{% endif %}>What is your favorite food?</option>
+                    <option value="What is your favorite place?" {% if security_question == "What is your favorite place?" %}selected{% endif %}>What is your favorite place?</option>
+                    <option value="What is your favorite hero?" {% if security_question == "What is your favorite hero?" %}selected{% endif %}>What is your favorite hero?</option>
+                    <option value="What is your favorite colour?" {% if security_question == "What is your favorite colour?" %}selected{% endif %}>What is your favorite colour?</option>
                 </select>
             </div>
             
