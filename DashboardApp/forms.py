@@ -4,7 +4,7 @@ from .models import Lesson, Event
 class LessonForm(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['title', 'description', 'content', 'category', 'difficulty', 'duration', 'resources']
+        fields = ['title', 'description', 'content', 'category', 'difficulty', 'duration', 'resources', 'creator']
 
 class EventForm(forms.ModelForm):
     class Meta:

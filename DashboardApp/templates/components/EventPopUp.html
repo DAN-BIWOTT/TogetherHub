@@ -1,7 +1,50 @@
-<div id="eventPopup" class="popup">
-    <h3 id="popupTitle"></h3>
-    <p id="popupDate"></p>
-    <p id="popupLocation"></p>
-    <p id="popupDescription"></p>
-    <button class="popup-close" onclick="closePopup()">Close</button>
+<div id="eventPopup" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <h3 id="popupTitle"></h3>
+        <p id="popupDate"></p>
+        <p id="popupLocation"></p>
+        <p id="popupDescription"></p>
+        <div id="errorMessage" style="color: red; display: none;">Error loading event details.</div>
+        <form id="registerForm" action="" method="POST" style="display: none;">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary">Register</button>
+        </form>
+        {% if request.user.membership == 'Workspace' %}
+        <a id="deleteEventLink" href="#" class="btn-danger" style="display: none;">Delete Event</a>
+        {% endif %}
+    </div>
 </div>
+
+<style>
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .popup-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        width: 400px;
+        position: relative;
+    }
+    
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    
+</style>

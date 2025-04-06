@@ -8,7 +8,7 @@
 {% endif %}
 {% endblock %}</h2>
 {% block content %}
-
+{% include "components/EventPopUp.html" %}
     <style>
          @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;700&display=swap');
 
@@ -122,7 +122,7 @@
     </style>
 
 <input type="text" id="searchInput" placeholder="Search events..." onkeyup="filterEvents()" class="search-box">
-
+<a href="{% url 'create_event' %}" class="btn btn-primary">Add Event</a>
 <div class="event-container">
     {% for event in allEvents %}
     <div class="event-card" 
@@ -155,6 +155,58 @@
                 card.style.display = "none";
             }
         });
+    }
+
+    function openPopup(element) {
+        const popup = document.getElementById('eventPopup');
+        if (!popup) {
+            console.error("Error: Popup element not found.");
+            return;
+        }
+    
+        // Check if elements exist before modifying them
+        const titleElement = document.getElementById('popupTitle');
+        const dateElement = document.getElementById('popupDate');
+        const locationElement = document.getElementById('popupLocation');
+        const descriptionElement = document.getElementById('popupDescription');
+        const deleteLink = document.getElementById('deleteEventLink');
+        const registerForm = document.getElementById('registerForm');
+        const errorMessage = document.getElementById('errorMessage');
+    
+        // Extract data from event card
+        const eventId = element.getAttribute('data-eventId') || "Unknown Event";
+        const eventName = element.getAttribute('data-name') || "No Title";
+        const eventDate = element.getAttribute('data-date') || "No Date";
+        const eventLocation = element.getAttribute('data-location') || "No Location";
+        const eventDescription = element.getAttribute('data-description') || "No Description";
+    
+        if (titleElement) titleElement.innerText = eventName;
+        if (dateElement) dateElement.innerText = "📅 " + eventDate;
+        if (locationElement) locationElement.innerText = "📍 " + eventLocation;
+        if (descriptionElement) descriptionElement.innerText = eventDescription;
+    
+        if (eventId !== "Unknown Event" && registerForm) {
+            registerForm.action = "/dashboard/register-event/" + eventId + "/";
+            registerForm.style.display = 'block';
+            if (errorMessage) errorMessage.style.display = 'none';
+        } else if (errorMessage) {
+            registerForm.style.display = 'none';
+            errorMessage.style.display = 'block';
+        }
+    
+        if (eventId !== "Unknown Event" && deleteLink) {
+            deleteLink.href = "/dashboard/delete-event/" + eventId + "/";
+            deleteLink.style.display = 'inline-block';
+        } else if (deleteLink) {
+            deleteLink.style.display = 'none';
+        }
+    
+        popup.style.display = 'flex'; // Show the popup properly
+    }
+
+    
+    function closePopup() {
+        document.getElementById('eventPopup').style.display = 'none';
     }
 </script>
 

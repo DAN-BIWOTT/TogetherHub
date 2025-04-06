@@ -37,8 +37,13 @@ class Lesson(models.Model):
     difficulty = models.CharField(max_length=50)
     duration = models.IntegerField()
     resources = models.URLField(blank=True, null=True)
+    creator = models.ForeignKey(CustomUser, related_name="created_lessons", on_delete=models.CASCADE,null=True, blank=True)
     enrolled_users = models.ManyToManyField(CustomUser, related_name="enrolled_lessons", blank=True)
 
+    def save(self, *args, **kwargs):
+            if not self.creator and hasattr(self, '_request_user'):
+                self.creator = self._request_user
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

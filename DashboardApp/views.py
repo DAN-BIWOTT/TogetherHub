@@ -185,6 +185,7 @@ def clean_user_interest(raw_interests):
 def manageEvents(request):
     if request.user.membership in ['admin','community']:
           allEvents = Event.objects.order_by('-created_at')
+          print(allEvents)
     else:
       allEvents = Event.objects.filter(organizer=request.user).order_by('-created_at')
     
@@ -240,9 +241,9 @@ def delete_event(request, event_id):
 
 # MANAGE KEY ACCESS 🏫
 @login_required
-def learning(request): # Add a check that results in only lessons made by the current user.
+def learning(request):
     if request.user.membership in ['admin', 'Key Access', 'community']:
-        lessons = Lesson.objects.all()
+        lessons = Lesson.objects.order_by('title')
         return render(request, 'learning.html', {'lessons': lessons})
     else:
         return redirect('no_access')
@@ -253,6 +254,8 @@ def createLesson(request):
         if request.method == 'POST':
             form = LessonForm(request.POST)
             if form.is_valid():
+                lesson = form.save(commit=False)
+                lesson._request_user = request.user
                 form.save()
                 return redirect('learning')
         else:
@@ -290,6 +293,7 @@ def delete_lesson(request, lesson_id):
     if request.user.membership in ['admin', 'Key Access']:
         lesson = get_object_or_404(Lesson, id=lesson_id)
         if request.method == 'POST':
+            print("We get here too!")
             lesson.delete()
             return redirect('learning')
         return render(request, 'learning.html', {'lesson': lesson})

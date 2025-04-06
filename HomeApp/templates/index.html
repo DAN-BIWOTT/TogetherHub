@@ -69,6 +69,58 @@
             border-radius: 10px;
         }
     </style>
+    
+    <style>
+        .event-card {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+    
+        .card-content {
+            background: rgba(0, 0, 0, 0.4); /* Dark overlay for text contrast */
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 90%;
+            margin-bottom: 20px;
+        }
+    
+        .event-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+        }
+    
+        .event-description {
+            font-size: 14px;
+            margin: 10px 0;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+    
+        .event-details {
+            font-size: 14px;
+            margin-top: 15px;
+        }
+    
+        .event-datetime, .event-location {
+            margin: 5px 0;
+            font-weight: 300;
+        }
+    
+        .event-datetime strong, .event-location strong {
+            font-weight: bold;
+        }
+    </style>
+    
 </head>
 <body>
     <!-- Navbar -->
@@ -81,10 +133,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Membership</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://togetherhub.tawk.help/category/about-page">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://togetherhub.tawk.help/category/memberships">Membership</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#event_scroll">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://togetherhub.tawk.help/">Community</a></li>
                 </ul>
                 <a href="auth/sign_in/" class="btn btn-outline-dark ms-3">Login</a>
                 <a href="auth/sign_up/" class="btn btn-dark ms-2">Sign Up</a>
@@ -171,14 +223,25 @@
     </section>
  <!-- Upcoming Events -->
  <section class="container my-5 text-center">
-    <h2 class="section-title">Upcoming Events</h2>
+    <h2 class="section-title" id="event_scroll">Upcoming Events</h2>
     <div class="row">
+        {% for event in latest_events %}
         <div class="col-md-6">
-            <div class="card">Upcoming Event 1</div>
+            <div class="card event-card" 
+                style="background-image: url('/dashboard{{ event.poster.url }}'); background-size: cover; background-position: center;">
+                
+                <div class="card-content">
+                    <h3 class="event-title">{{ event.name }}</h3>
+                    <p class="event-description">{{ event.description }}</p>
+                    
+                    <div class="event-details">
+                        <p class="event-datetime"><strong>📅</strong> {{ event.start_date|date:"F j, Y, g:i A" }} - {{ event.end_date|date:"F j, Y, g:i A" }}</p>
+                        <p class="event-location"><strong>📍</strong> {{ event.location }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <div class="card">Upcoming Event 2</div>
-        </div>
+        {% endfor %}
     </div>
 </section>
 
