@@ -188,7 +188,9 @@
 <body>  
     <div class="sidebar">
         <div class="sidebar-top">
-            <h4>TogetherHub</h4>
+            <a href="http://localhost:8000/">
+                <h4>TogetherHub</h4>
+            </a>
             {% comment %} Purely Admin links {% endcomment %}
             {% if request.user.membership == "admin" %}
                 <a href="{% url 'adminHome' %}"><i class="fa-solid fa-home"></i> Home</a>
