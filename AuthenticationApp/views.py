@@ -11,7 +11,7 @@ def sign_in(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        # No need to pass 'username' anymore, just 'email'
+        # No need to pass 'username' anymore, just 'email' will do
         user = authenticate(request, email=email, password=password)
 
         if user is not None:

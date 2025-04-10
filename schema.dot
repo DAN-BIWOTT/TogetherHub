@@ -1,0 +1,10 @@
+
+digraph AdminMemberTagging {
+    rankdir=LR;
+    node [shape=record, style=filled, fillcolor=lightgreen];
+
+    Admin [label="{Admin | id : int}"];
+    CustomUser [label="{CustomUser | id : int | interest : str | skills : text | occupation : str}"];
+    
+    Admin -> CustomUser [label="tags/categorizes"];
+}
